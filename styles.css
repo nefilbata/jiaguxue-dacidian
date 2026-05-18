@@ -125,6 +125,16 @@ input, select{ font-family: inherit; }
   margin-right: auto;
   box-sizing: border-box;
 }
+.hero::before{
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 500px;
+  background: radial-gradient(ellipse at center, rgba(245,240,232,0.9) 0%, rgba(245,240,232,0.4) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 1;
+}
 .hero-inner{
   position:relative;
   max-width: 1200px;
@@ -175,22 +185,32 @@ footer{
           mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
 }
 
-/* Left side rubbing (拓片) — soft watermark fragment */
+/* Left side rubbing (拓片) — tilted, floating */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(-50%) rotate(-3deg) translateX(0); }
+  50%      { transform: translateY(calc(-50% - 8px)) rotate(-3.5deg) translateX(2px); }
+}
+@keyframes floatSlowBone {
+  0%, 100% { transform: translateY(-50%) rotate(2.5deg) translateX(0); }
+  50%      { transform: translateY(calc(-50% - 10px)) rotate(3deg) translateX(-2px); }
+}
 .rubbing-wrap{
   position: absolute;
-  left: clamp(20px, 4vw, 60px);
+  left: clamp(-10px, 2vw, 40px);
   top: 50%;
-  transform: translateY(-50%);
-  width: clamp(220px, 24vw, 320px);
+  transform: translateY(-50%) rotate(-3deg);
+  width: clamp(220px, 24vw, 340px);
   z-index: 1;
   pointer-events: none;
-  opacity: 0.32;
-  max-height: 92%;
+  opacity: 0.22;
+  max-height: 95%;
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 50%, transparent 95%);
-          mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 50%, transparent 95%);
+  animation: floatSlow 8s ease-in-out infinite;
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 55% 50%, #000 40%, transparent 90%);
+          mask-image: radial-gradient(ellipse 70% 80% at 55% 50%, #000 40%, transparent 90%);
+  transition: opacity .6s ease;
 }
 .rubbing-wrap img{
   max-width: 100%;
@@ -199,23 +219,27 @@ footer{
   height: auto;
   display: block;
   mix-blend-mode: multiply;
+  filter: sepia(0.15) contrast(1.1);
 }
 
-/* Right side bone image — fully visible, integrates with paper */
+/* Right side bone image — tilted opposite, floating offset */
 .bone-wrap{
   position: absolute;
-  right: clamp(20px, 4vw, 60px);
+  right: clamp(-10px, 2vw, 40px);
   top: 50%;
-  transform: translateY(-50%);
-  width: clamp(220px, 24vw, 320px);
+  transform: translateY(-50%) rotate(2.5deg);
+  width: clamp(220px, 24vw, 340px);
   z-index: 1;
   pointer-events: none;
-  max-height: 92%;
+  max-height: 95%;
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-mask-image: radial-gradient(ellipse 80% 88% at 50% 50%, #000 55%, transparent 100%);
-          mask-image: radial-gradient(ellipse 80% 88% at 50% 50%, #000 55%, transparent 100%);
+  opacity: 0.85;
+  animation: floatSlowBone 9s ease-in-out infinite;
+  -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 50%, transparent 95%);
+          mask-image: radial-gradient(ellipse 75% 85% at 50% 50%, #000 50%, transparent 95%);
+  transition: opacity .6s ease;
 }
 .bone-wrap img{
   max-width: 100%;
@@ -224,7 +248,8 @@ footer{
   height: auto;
   display: block;
   mix-blend-mode: multiply;
-  filter: contrast(1.04) saturate(0.92);
+  filter: contrast(1.06) saturate(0.88) sepia(0.08);
+  drop-shadow: 0 8px 32px rgba(44,24,16,0.15);
 }
 
 /* Disable old composition-system classes that we are no longer using */
@@ -291,6 +316,12 @@ footer{
   font-size: clamp(14px, 1.1vw, 16px);
   color: var(--text-mid);
   margin: 0;
+}
+
+/* Pause float on hero hover — subtle interactivity */
+.hero:hover .rubbing-wrap,
+.hero:hover .bone-wrap{
+  animation-play-state: paused;
 }
 
 /* Inner-page bone & rubbing — bone smaller, with soft mask, no rubbing on inner */
@@ -535,8 +566,8 @@ footer .sep{ color: var(--border); margin: 0 10px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px){
-  .bone-wrap{ width: 24vw; right: 14px; }
-  .rubbing-wrap{ width: 20vw; opacity: 0.45; }
+  .bone-wrap{ width: 22vw; right: 10px; opacity: 0.75; }
+  .rubbing-wrap{ width: 18vw; opacity: 0.18; }
 }
 @media (max-width: 720px){
   .nav{ padding: 0 16px; }
@@ -548,11 +579,13 @@ footer .sep{ color: var(--border); margin: 0 10px; }
 
   .hero{ padding: 56px 18px 36px; }
   .hero-page{ padding: 36px 18px 32px; }
-  .rubbing-wrap{ width: 36vw; left: -20px; opacity: 0.4; }
+  .rubbing-wrap{ width: 32vw; left: -24px; opacity: 0.15; animation-duration: 10s; }
   .bone-wrap{
-    width: 36vw;
-    right: -6px;
+    width: 32vw;
+    right: -10px;
     top: 52%;
+    opacity: 0.7;
+    animation-duration: 11s;
   }
   .title-main{ font-size: 56px; line-height: 1.06; letter-spacing: 0.03em; }
   .title-page{ font-size: 36px !important; }

@@ -15,7 +15,7 @@
   /* ---------- Quick nav strip ---------- */
   .quick-nav{
     max-width: 1240px;
-    margin: 36px auto 0;
+    margin: 48px auto 0;
     padding: 0 28px;
   }
   .quick-nav-inner{
@@ -30,11 +30,27 @@
     padding: 22px 22px;
     border-right: 1px solid var(--border-lt);
     color: var(--text);
-    transition: background .15s;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    position: relative;
+  }
+  .qn-item::after{
+    content: "";
+    position: absolute;
+    bottom: 0; left: 22px; right: 22px;
+    height: 2px;
+    background: var(--primary);
+    transform: scaleX(0);
+    transition: transform .25s ease;
   }
   .qn-item:last-child{ border-right:0; }
-  .qn-item:hover{ background: rgba(196,168,130,0.08); }
-  .qn-item:hover .arrow{ color: var(--primary); transform: translateX(2px); }
+  .qn-item:hover{
+    background: rgba(196,168,130,0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px -8px rgba(44,24,16,0.12);
+  }
+  .qn-item:hover::after{ transform: scaleX(1); }
+  .qn-item:hover .arrow{ color: var(--primary); transform: translateX(3px); }
+  .qn-item:hover .qn-icon{ border-color: var(--primary); color: var(--primary); }
   .qn-icon{
     width: 44px; height: 44px;
     border: 1.4px solid var(--accent);
@@ -44,6 +60,7 @@
     flex-shrink:0;
     font-size: 14px;
     font-weight:700;
+    transition: border-color .2s, color .2s;
   }
   .qn-icon svg{ width: 24px; height: 24px; }
   .qn-text{ flex:1; min-width:0; }
@@ -60,7 +77,7 @@
   .intro-wrap{
     position:relative;
     max-width: 1240px;
-    margin: 50px auto 0;
+    margin: 60px auto 0;
     padding: 0 28px 80px;
   }
   .intro{
@@ -93,11 +110,12 @@
     gap: 18px;
   }
   .stat-num{
-    font-size: 38px;
+    font-size: 44px;
     font-weight: 900;
     color: var(--primary);
     line-height: 1;
     font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
   }
   .stat-label{ font-size: 14px; color: var(--text-mute); line-height: 1.4; }
   .stat-label b{
@@ -382,6 +400,53 @@
 
 <script src="site.js"></script>
 <script>
+  /* ---- Count-up animation for stat numbers ---- */
+  function animateCountUp(el, target, suffix, duration) {
+    const start = performance.now();
+    const format = n => n.toLocaleString();
+    el.textContent = '0';
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const val = Math.round(ease * target);
+      el.textContent = format(val) + (suffix || '');
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  // Observe stat cards
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const nums = entry.target.querySelectorAll('.stat-num');
+        nums.forEach(n => {
+          const raw = n.textContent.replace(/,/g, '').trim();
+          const val = parseInt(raw, 10);
+          if (!isNaN(val)) animateCountUp(n, val, '', 1200);
+        });
+        statObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  const introEl = document.querySelector('.intro');
+  if (introEl) statObserver.observe(introEl);
+
+  /* ---- Hero entrance fade ---- */
+  document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(18px)';
+      hero.style.transition = 'opacity .7s ease, transform .7s ease';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          hero.style.opacity = '1';
+          hero.style.transform = 'translateY(0)';
+        });
+      });
+    }
+  });
+
   let _allEntries = [];
   let _curResults = [];
   let _curPage = 1;
