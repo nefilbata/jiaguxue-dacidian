@@ -14,27 +14,36 @@
   /* A-Z bar */
   .az-bar{
     display:flex; flex-wrap:wrap;
-    gap: 6px;
+    gap: 4px;
     background: var(--bg-card);
     border: 1px solid var(--border-lt);
-    border-radius: 3px;
-    padding: 14px 18px;
-    margin-bottom: 22px;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 26px;
   }
   .az-bar a{
     flex:1 0 auto;
     min-width: 38px;
     text-align: center;
-    padding: 8px 4px;
+    padding: 9px 4px;
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text);
-    border-radius: 2px;
-    transition: all .15s;
+    border-radius: 3px;
+    transition: all .2s;
+    position: relative;
   }
-  .az-bar a:hover{ background: var(--primary-lt); color: var(--primary); }
-  .az-bar a.cur{ background: var(--primary); color: #fff; }
-  .az-bar a.empty{ color: var(--border); cursor: default; pointer-events:none; }
+  .az-bar a:hover:not(.empty):not(.cur){
+    background: var(--primary-lt);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .az-bar a.cur{
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 2px 8px -2px rgba(139,26,26,0.35);
+  }
+  .az-bar a.empty{ color: var(--border); cursor: default; pointer-events:none; opacity: 0.5; }
 
   .meta-row{
     display:flex; justify-content:space-between; align-items:baseline;
@@ -64,7 +73,9 @@
     word-break: break-word;
     overflow-wrap: anywhere;
     max-width: 100%;
+    transition: color .15s;
   }
+  tr:hover .e-title .han{ color: var(--primary); }
   .e-title .py{
     color: var(--text-mute);
     font-style: italic;
@@ -173,6 +184,20 @@
 
 <script src="site.js"></script>
 <script>
+  /* Hero entrance fade */
+  document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity .6s ease, transform .6s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }));
+    }
+  });
+
   const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   const PAGE_SIZE = 10;
   let _entries = [];
@@ -226,7 +251,16 @@
     document.getElementById('curLetter').textContent = L;
     const list = _byLetter[L] || [];
     document.getElementById('letterCount').textContent = list.length.toLocaleString();
-    renderTable();
+    // Fade table content
+    const table = document.querySelector('.dt-table');
+    table.style.opacity = '0';
+    table.style.transform = 'translateY(6px)';
+    table.style.transition = 'opacity .25s ease, transform .25s ease';
+    setTimeout(() => {
+      renderTable();
+      table.style.opacity = '1';
+      table.style.transform = 'translateY(0)';
+    }, 150);
   }
 
   function renderTable(){
