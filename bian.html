@@ -175,9 +175,13 @@
     border: 1px solid var(--border-lt);
     padding: 20px 22px;
     border-radius: 3px;
-    transition: all .15s;
+    transition: all .2s;
   }
-  .feat-card:hover{ border-color: var(--red-border); }
+  .feat-card:hover{
+    border-color: var(--red-border);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -8px rgba(139,26,26,0.18);
+  }
   .feat-card .ft{ font-size: 22px; font-weight: 700; margin-bottom: 2px; }
   .feat-card .fpy{ color: var(--primary); font-style: italic; font-size: 13.5px; margin-bottom: 12px; }
   .feat-card .fd{ font-size: 13px; color: var(--text-mute); line-height: 1.65; margin-bottom: 12px; }
@@ -321,6 +325,20 @@
 
 <script src="site.js"></script>
 <script>
+  /* Hero entrance */
+  (function(){
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity .6s ease, transform .6s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }));
+    }
+  })();
+
   const ROMAN = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ'];
   const BIAN_DESC = {
     '第一編 理論術語類': '收錄甲骨學基礎理論、學術範式與專業術語，是學科認識與研究方法的入口。',

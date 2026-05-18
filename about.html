@@ -65,9 +65,13 @@
     border: 1px solid var(--border-lt);
     border-radius: 3px;
     padding: 24px 26px;
-    transition: all .15s;
+    transition: all .2s;
   }
-  .usage-card:hover{ border-color: var(--red-border); }
+  .usage-card:hover{
+    border-color: var(--red-border);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -8px rgba(139,26,26,0.18);
+  }
   .usage-card .ico{
     width: 38px; height: 38px;
     border: 1.4px solid var(--accent);
@@ -249,5 +253,20 @@
 </footer>
 
 <script src="site.js"></script>
+<script>
+  /* Hero entrance */
+  (function(){
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity .6s ease, transform .6s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }));
+    }
+  })();
+</script>
 </body>
 </html>

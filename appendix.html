@@ -37,9 +37,9 @@
     color: var(--text-mid);
     font-size: 15px;
     border-left: 3px solid transparent;
-    transition: all .15s;
+    transition: all .2s;
   }
-  .app-side li a:hover{ color: var(--primary); background: rgba(196,168,130,0.06); }
+  .app-side li a:hover{ color: var(--primary); background: rgba(196,168,130,0.06); border-left-color: var(--red-border); }
   .app-side li.cur a{
     background: var(--primary);
     color: #fff;
@@ -454,12 +454,22 @@
     },
   };
 
-  function selectTab(tab){
+  function selectTab(tab, scrollToTop){
     document.querySelectorAll('#appNav li').forEach(li => {
       li.classList.toggle('cur', li.querySelector('a').dataset.tab === tab);
     });
-    document.getElementById('appMain').innerHTML = render[tab]();
-    window.scrollTo({top: document.querySelector('.app-layout').offsetTop - 70, behavior: 'smooth'});
+    const main = document.getElementById('appMain');
+    // Fade out then in
+    main.style.transition = 'opacity .2s ease';
+    main.style.opacity = '0';
+    setTimeout(() => {
+      main.innerHTML = render[tab]();
+      main.style.opacity = '1';
+      // Only scroll on initial load or explicit request
+      if (scrollToTop) {
+        document.getElementById('appMain').scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+    }, 150);
   }
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -470,11 +480,25 @@
   }
 
   document.querySelectorAll('#appNav a').forEach(a => {
-    a.addEventListener('click', e => { e.preventDefault(); selectTab(a.dataset.tab); });
+    a.addEventListener('click', e => { e.preventDefault(); selectTab(a.dataset.tab, true); });
   });
 
-  // initial
-  selectTab('jiagu');
+  // Hero entrance
+  (function(){
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity .6s ease, transform .6s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }));
+    }
+  })();
+
+  // initial — no scroll
+  selectTab('jiagu', false);
 </script>
 </body>
 </html>

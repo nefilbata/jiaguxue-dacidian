@@ -39,10 +39,15 @@
     border: 1px solid transparent;
     border-radius: 3px;
     cursor: pointer;
-    transition: all .15s;
+    transition: all .2s;
     background: var(--bg);
   }
-  .bs-cell:hover{ background: var(--primary-lt); border-color: var(--red-border); }
+  .bs-cell:hover{
+    background: var(--primary-lt);
+    border-color: var(--red-border);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px -4px rgba(139,26,26,0.15);
+  }
   .bs-cell.cur{
     background: var(--primary-lt);
     border-color: var(--primary);
@@ -225,6 +230,20 @@
 
 <script src="site.js"></script>
 <script>
+  /* Hero entrance */
+  document.addEventListener('DOMContentLoaded', () => {
+    const hero = document.querySelector('.hero-inner');
+    if (hero) {
+      hero.style.opacity = '0';
+      hero.style.transform = 'translateY(14px)';
+      hero.style.transition = 'opacity .6s ease, transform .6s ease';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        hero.style.opacity = '1';
+        hero.style.transform = 'translateY(0)';
+      }));
+    }
+  });
+
   let _entries = [];
   let _bushouGroups = []; // [{ char, count, items }]
   let _curBs = null;
