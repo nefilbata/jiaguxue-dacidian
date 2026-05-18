@@ -126,7 +126,7 @@
 
 <nav class="nav">
   <div class="nav-left">
-    <div class="logo" aria-hidden="true">甲</div>
+    <div class="logo" aria-hidden="true">�?/div>
     <div class="brand">
       <span class="tc">甲骨學大辭典</span>
       <span class="en">JIAGUXUE DACIDIAN</span>
@@ -134,11 +134,11 @@
   </div>
   <div class="nav-menu">
     <a href="index.html">首頁</a>
-    <a href="pinyin.html">按音序</a>
-    <a href="bushou.html" class="active">按部首</a>
-    <a href="bian.html">按編類</a>
+    <a href="pinyin.html">按音�?/a>
+    <a href="bushou.html" class="active">按部�?/a>
+    <a href="bian.html">按編�?/a>
     <a href="appendix.html">附錄</a>
-    <a href="about.html">關於本辭典</a>
+    <a href="about.html">關於本辭�?/a>
   </div>
   <div class="nav-right">
     <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -153,11 +153,11 @@
 
 <div class="m-menu" id="mmenu">
   <a href="index.html">首頁</a>
-  <a href="pinyin.html">按音序</a>
-  <a href="bushou.html" class="active">按部首</a>
-  <a href="bian.html">按編類</a>
+  <a href="pinyin.html">按音�?/a>
+  <a href="bushou.html" class="active">按部�?/a>
+  <a href="bian.html">按編�?/a>
   <a href="appendix.html">附錄</a>
-  <a href="about.html">關於本辭典</a>
+  <a href="about.html">關於本辭�?/a>
 </div>
 
 <section class="hero hero-page">
@@ -167,10 +167,10 @@
   </div>
   <div class="hero-inner">
     <nav class="crumbs">
-      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <a href="index.html">首頁</a> <span class="sep">�?/span>
       <span class="cur">按部首瀏覽</span>
     </nav>
-    <h1 class="title-page">按部首<span class="red">瀏覽</span></h1>
+    <h1 class="title-page">按部�?span class="red">瀏覽</span></h1>
     <p class="sub-page">以形索義・按部首檢索甲骨文字，傳統字書的字形索引方式</p>
   </div>
 </section>
@@ -180,21 +180,21 @@
   <!-- Common bushou grid -->
   <div class="bs-head">
     <h2 class="section-h" style="margin-bottom:0">常用部首</h2>
-    <div class="meta">收錄常用部首 <b id="bushouCount">—</b> 部</div>
+    <div class="meta">收錄常用部首 <b id="bushouCount">�?/b> �?/div>
   </div>
   <div class="bushou-grid" id="bushouGrid"></div>
 
   <!-- Glyph list -->
   <div class="bs-head">
     <h2 class="section-h" style="margin-bottom:0">字形列表</h2>
-    <div class="meta">當前部首：<b id="curBushou" style="color:var(--text)">—</b>　共 <b id="curBushouCount">0</b> 字</div>
+    <div class="meta">當前部首�?b id="curBushou" style="color:var(--text)">�?/b>　�?<b id="curBushouCount">0</b> �?/div>
   </div>
   <table class="dt-table gtbl">
     <thead>
       <tr>
         <th style="width:80px; text-align:center;">字形</th>
         <th style="width:18%">字頭</th>
-        <th style="width:12%">讀音</th>
+        <th style="width:12%">讀�?/th>
         <th>釋義</th>
         <th style="width:12%; text-align:center;">出現次數</th>
         <th style="width:18%">例組</th>
@@ -233,11 +233,11 @@
 
   // Curated radical names for display (display-only)
   const BS_NAMES = {
-    '甲':'甲部','骨':'骨部','卜':'卜部','貞':'貝部','王':'王部','殷':'殳部','商':'口部','文':'文部',
-    '字':'宀部','學':'子部','史':'口部','祭':'示部','人':'人部','日':'日部','月':'月部',
-    '天':'大部','地':'土部','金':'金部','石':'石部','龜':'龜部','安':'宀部','方':'方部','土':'土部',
-    '木':'木部','水':'水部','火':'火部','山':'山部','田':'田部','示':'示部','大':'大部','口':'口部',
-    '目':'目部','心':'心部','手':'手部','足':'足部','馬':'馬部','牛':'牛部','羊':'羊部',
+    '�?:'甲部','�?:'骨部','�?:'卜部','�?:'貝部','�?:'王部','�?:'殳部','�?:'口部','�?:'文部',
+    '�?:'宀�?,'�?:'子部','�?:'口部','�?:'示部','�?:'人部','�?:'日部','�?:'月部',
+    '�?:'大部','�?:'土部','�?:'金部','�?:'石部','�?:'龜部','�?:'宀�?,'�?:'方部','�?:'土部',
+    '�?:'木部','�?:'水部','�?:'火部','�?:'山部','�?:'田部','�?:'示部','�?:'大部','�?:'口部',
+    '�?:'目部','�?:'心部','�?:'手部','�?:'足部','�?:'馬部','�?:'牛部','�?:'羊部',
   };
 
   loadEntries().then(d => {
@@ -251,7 +251,7 @@
       // Skip Latin, digits, all CJK / Western punctuation
       if (/[\sA-Za-z0-9]/.test(ch)) return;
       if (/\p{P}/u.test(ch)) return;
-      // Only keep CJK Unified Ideographs (basic + ext A) — exclude rare extensions for cleaner grid
+      // Only keep CJK Unified Ideographs (basic + ext A) �?exclude rare extensions for cleaner grid
       if (!/[\u3400-\u9fff]/.test(ch)) return;
       if (!map.has(ch)) map.set(ch, []);
       map.get(ch).push(e);
@@ -272,7 +272,7 @@
     grid.innerHTML = _bushouGroups.map((g, i) => `
       <div class="bs-cell${g === _curBs ? ' cur' : ''}" data-i="${i}" onclick="selectBs(${i})">
         <div class="glyph">${esc(g.char)}</div>
-        <div class="name">${esc(BS_NAMES[g.char] || g.char + '部')}</div>
+        <div class="name">${esc(BS_NAMES[g.char] || g.char + '�?)}</div>
         <div class="cnt">${g.count}</div>
       </div>
     `).join('');
@@ -291,7 +291,7 @@
     const groups = ['合集','屯南','花園莊東','英藏','懷特'];
     const g = groups[id % groups.length];
     const n = ((id * 7) % 9000) + 1000;
-    return `${g}・${n}`;
+    return `${g}�?{n}`;
   }
 
   function renderGlyphTable(){
@@ -307,14 +307,14 @@
         <td class="glyph-cell">${esc(e.title.charAt(0))}</td>
         <td><div class="ztou">${esc(e.title)}<span class="audio" title="發音">🔊</span></div></td>
         <td><span class="gpy">${esc(e.pinyin || '')}</span></td>
-        <td class="gdesc">${esc(e.zhang || '')}${e.jie ? ' ／ ' + esc(e.jie) : ''}</td>
+        <td class="gdesc">${esc(e.zhang || '')}${e.jie ? ' �?' + esc(e.jie) : ''}</td>
         <td style="text-align:center;"><span class="gcnt">${pseudoCount(e.id)}</span></td>
         <td class="gex">${pseudoExGroup(e.id)}</td>
       </tr>
     `).join('');
 
     document.getElementById('bsPagerMeta').textContent =
-      `共 ${_curBs.count.toLocaleString()} 字 ・ 顯示 ${start + 1}-${Math.min(_curBs.count, start + _pageSize)} 條`;
+      `�?${_curBs.count.toLocaleString()} �?�?顯示 ${start + 1}-${Math.min(_curBs.count, start + _pageSize)} 條`;
 
     renderPager(document.getElementById('bsPager'), _curBs.count, _pageSize, _curPage, p => {
       _curPage = p;

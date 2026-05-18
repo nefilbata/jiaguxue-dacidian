@@ -120,6 +120,10 @@ input, select{ font-family: inherit; }
   position:relative;
   padding: 70px 28px 50px;
   overflow:hidden;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 .hero-inner{
   position:relative;
@@ -135,7 +139,7 @@ input, select{ font-family: inherit; }
   position: fixed;
   left: 0; right: 0; bottom: 0;
   height: 50vh;
-  background-image: url("images/landscape.png");
+  background-image: url("images/shan.png");
   background-repeat: no-repeat;
   background-position: 50% 100%;
   background-size: 105% auto;
@@ -159,7 +163,7 @@ footer{
 .landscape-bg{
   position: absolute;
   inset: 0;
-  background-image: url("images/landscape.png");
+  background-image: url("images/shan.png");
   background-repeat: no-repeat;
   background-position: 50% 30%;
   background-size: 130% auto;
@@ -395,14 +399,14 @@ footer{
 /* Hot tags */
 .hot-tags{
   margin-top: 24px;
-  display:flex; flex-wrap:wrap; justify-content:center;
-  gap: 0;
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+  gap: 4px 0;
   font-size: 15px;
   color: var(--text-mid);
 }
-.hot-tags .label{ color: var(--text-mute); margin-right: 10px; font-weight:500; }
+.hot-tags .label{ color: var(--text-mute); margin-right: 4px; font-weight:500; }
 .hot-tags a{
-  padding: 4px 14px;
+  padding: 4px 10px;
   color: var(--text);
   transition: color .15s;
 }
