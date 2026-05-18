@@ -215,7 +215,7 @@
 
 <nav class="nav">
   <div class="nav-left">
-    <div class="logo" aria-hidden="true">�?/div>
+    <div class="logo" aria-hidden="true">甲</div>
     <div class="brand">
       <span class="tc">甲骨學大辭典</span>
       <span class="en">JIAGUXUE DACIDIAN</span>
@@ -223,11 +223,11 @@
   </div>
   <div class="nav-menu">
     <a href="index.html">首頁</a>
-    <a href="pinyin.html">按音�?/a>
-    <a href="bushou.html">按部�?/a>
-    <a href="bian.html" class="active">按編�?/a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html" class="active">按編類</a>
     <a href="appendix.html">附錄</a>
-    <a href="about.html">關於本辭�?/a>
+    <a href="about.html">關於本辭典</a>
   </div>
   <div class="nav-right">
     <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -242,11 +242,11 @@
 
 <div class="m-menu" id="mmenu">
   <a href="index.html">首頁</a>
-  <a href="pinyin.html">按音�?/a>
-  <a href="bushou.html">按部�?/a>
-  <a href="bian.html" class="active">按編�?/a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html" class="active">按編類</a>
   <a href="appendix.html">附錄</a>
-  <a href="about.html">關於本辭�?/a>
+  <a href="about.html">關於本辭典</a>
 </div>
 
 <section class="hero hero-page">
@@ -256,10 +256,10 @@
   </div>
   <div class="hero-inner">
     <nav class="crumbs">
-      <a href="index.html">首頁</a> <span class="sep">�?/span>
+      <a href="index.html">首頁</a> <span class="sep">›</span>
       <span class="cur">按編類瀏覽</span>
     </nav>
-    <h1 class="title-page">按編�?span class="red">瀏覽</span></h1>
+    <h1 class="title-page">按編類<span class="red">瀏覽</span></h1>
     <p class="sub-page">依《甲骨學大辭典》六大編分類瀏覽條目・傳統體例的學術組織</p>
   </div>
 </section>
@@ -274,18 +274,18 @@
     </div>
     <div class="side-list" id="sideList"></div>
     <div class="side-foot">
-      �?<b id="sfBian">6</b> �?�?<b id="sfTotal">3,881</b> 條目
+      共 <b id="sfBian">6</b> 編 ・ <b id="sfTotal">3,881</b> 條目
     </div>
   </aside>
 
   <!-- Main -->
   <div>
     <div class="bian-card" id="bianCard">
-      <div class="bian-num" id="bianRoman">�?/div>
+      <div class="bian-num" id="bianRoman">Ⅰ</div>
       <div class="bian-info">
-        <h2 id="bianTitle">第一�?理論術語�?<span class="tag" id="bianTag">當前�?/span></h2>
-        <p id="bianDesc">收錄甲骨學基礎理論與專業術語，涵蓋研究方法、學科沿革、概論等�?/p>
-        <div class="count">本編收錄詞條 <b id="bianCount">�?/b> 條，下分 <b id="bianZhangCount">�?/b> 章�?/div>
+        <h2 id="bianTitle">第一編 理論術語類 <span class="tag" id="bianTag">當前編</span></h2>
+        <p id="bianDesc">收錄甲骨學基礎理論與專業術語，涵蓋研究方法、學科沿革、概論等。</p>
+        <div class="count">本編收錄詞條 <b id="bianCount">—</b> 條，下分 <b id="bianZhangCount">—</b> 章。</div>
       </div>
     </div>
 
@@ -295,7 +295,7 @@
         <thead>
           <tr>
             <th style="width:60%">章名</th>
-            <th style="width:20%">條目�?/th>
+            <th style="width:20%">條目數</th>
             <th style="width:20%; text-align:right;">操作</th>
           </tr>
         </thead>
@@ -306,10 +306,10 @@
     <div>
       <div class="feat-head">
         <h3 class="section-h" style="margin-bottom:0">本章條目精選</h3>
-        <span style="color: var(--text-mute); font-size: 13px;" id="featChapName">�?/span>
+        <span style="color: var(--text-mute); font-size: 13px;" id="featChapName">—</span>
       </div>
       <div class="feat-grid" id="featGrid"></div>
-      <a class="view-all" id="viewAllLink" href="#">查看本章全部條目 �?/a>
+      <a class="view-all" id="viewAllLink" href="#">查看本章全部條目 ∨</a>
     </div>
   </div>
 
@@ -321,14 +321,14 @@
 
 <script src="site.js"></script>
 <script>
-  const ROMAN = ['�?,'�?,'�?,'�?,'�?,'�?];
+  const ROMAN = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ'];
   const BIAN_DESC = {
-    '第一�?理論術語�?: '收錄甲骨學基礎理論、學術範式與專業術語，是學科認識與研究方法的入口�?,
-    '第二�?考古文物�?: '收錄與甲骨相關的考古發現、文物器類、出土遺址與整理著錄等資料�?,
-    '第三�?語言文字�?: '收錄甲骨文字形、構形分析、文字學術語及語言學研究相關詞目�?,
-    '第四�?歷史文獻�?: '收錄與商代歷史、社會結構、典章制度及甲骨所載史事相關的詞條�?,
-    '第五�?研究成果�?: '收錄歷代甲骨學研究著作、學者貢獻、學派流變與學術成果的綜述�?,
-    '第六�?活動影響�?: '收錄甲骨學的傳播、教學、會議、機構與其在當代文化中的延伸影響�?,
+    '第一編 理論術語類': '收錄甲骨學基礎理論、學術範式與專業術語，是學科認識與研究方法的入口。',
+    '第二編 考古文物類': '收錄與甲骨相關的考古發現、文物器類、出土遺址與整理著錄等資料。',
+    '第三編 語言文字類': '收錄甲骨文字形、構形分析、文字學術語及語言學研究相關詞目。',
+    '第四編 歷史文獻類': '收錄與商代歷史、社會結構、典章制度及甲骨所載史事相關的詞條。',
+    '第五編 研究成果類': '收錄歷代甲骨學研究著作、學者貢獻、學派流變與學術成果的綜述。',
+    '第六編 活動影響類': '收錄甲骨學的傳播、教學、會議、機構與其在當代文化中的延伸影響。',
   };
 
   let _entries = [];
@@ -347,14 +347,14 @@
       const b = e.bian || '其他';
       if (!_byBian[b]) _byBian[b] = { list: [], zhangs: {} };
       _byBian[b].list.push(e);
-      const z = e.zhang || '未分�?;
+      const z = e.zhang || '未分章';
       if (!_byBian[b].zhangs[z]) _byBian[b].zhangs[z] = [];
       _byBian[b].zhangs[z].push(e);
     });
     // Order by first appearance of bian number
     _bianOrder = Object.keys(_byBian).sort((a, b) => {
-      const ma = a.match(/�?.)�?); const mb = b.match(/�?.)�?);
-      const order = { '一':1, '�?:2, '�?:3, '�?:4, '�?:5, '�?:6 };
+      const ma = a.match(/第(.)編/); const mb = b.match(/第(.)編/);
+      const order = { '一':1, '二':2, '三':3, '四':4, '五':5, '六':6 };
       return (order[ma?.[1]] || 99) - (order[mb?.[1]] || 99);
     });
     document.getElementById('sfBian').textContent = _bianOrder.length;
@@ -412,7 +412,7 @@
     const data = _byBian[_curBian];
     const idx = _bianOrder.indexOf(_curBian);
     document.getElementById('bianRoman').textContent = ROMAN[idx] || (idx+1);
-    document.getElementById('bianTitle').innerHTML = `${esc(_curBian)} <span class="tag">當前�?/span>`;
+    document.getElementById('bianTitle').innerHTML = `${esc(_curBian)} <span class="tag">當前編</span>`;
     document.getElementById('bianDesc').textContent = BIAN_DESC[_curBian] || '';
     document.getElementById('bianCount').textContent = data.list.length.toLocaleString();
     const zhangNames = Object.keys(data.zhangs);
@@ -425,24 +425,24 @@
       const isCur = z === _curZhang;
       return `<tr class="chap-row" style="${isCur ? 'background: rgba(139,26,26,0.04);' : ''}">
         <td><div class="name">${esc(z)}<span>${esc(data.zhangs[z][0]?.jie || '')}</span></div></td>
-        <td><span class="cnum">${cnt.toLocaleString()}</span> �?/td>
-        <td style="text-align:right;"><a class="btn-solid" href="javascript:void(0)" onclick="selectZhang('${esc(_curBian)}','${esc(z)}')">查看條目 �?/a></td>
+        <td><span class="cnum">${cnt.toLocaleString()}</span> 條</td>
+        <td style="text-align:right;"><a class="btn-solid" href="javascript:void(0)" onclick="selectZhang('${esc(_curBian)}','${esc(z)}')">查看條目 ›</a></td>
       </tr>`;
     }).join('');
 
     // featured (first 3 of cur zhang)
-    document.getElementById('featChapName').textContent = `當前章節�?{_curZhang}`;
+    document.getElementById('featChapName').textContent = `當前章節：${_curZhang}`;
     const items = (data.zhangs[_curZhang] || []).slice(0, 3);
     document.getElementById('featGrid').innerHTML = items.map(e => `
       <div class="feat-card">
         <div class="ft">${esc(e.title)}</div>
         <div class="fpy">${esc(e.pinyin || '')}</div>
-        <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' �?' + esc(e.xiao) : ''}</div>
-        <a class="flink" href="#">查看詳情 �?/a>
+        <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
+        <a class="flink" href="#">查看詳情 ›</a>
       </div>
     `).join('');
     const total = (data.zhangs[_curZhang] || []).length;
-    document.getElementById('viewAllLink').textContent = `查看本章全部 ${total} �?∨`;
+    document.getElementById('viewAllLink').textContent = `查看本章全部 ${total} 條 ∨`;
   }
 </script>
 </body>
