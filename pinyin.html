@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>按音序瀏覽 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Page-specific styles */
+
+  /* A-Z bar */
+  .az-bar{
+    display:flex; flex-wrap:wrap;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+  .az-bar a{
+    flex:1 0 auto;
+    min-width: 38px;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    border-radius: 2px;
+    transition: all .15s;
+  }
+  .az-bar a:hover{ background: var(--primary-lt); color: var(--primary); }
+  .az-bar a.cur{ background: var(--primary); color: #fff; }
+  .az-bar a.empty{ color: var(--border); cursor: default; pointer-events:none; }
+
+  .meta-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    color: var(--text-mute);
+    font-size: 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .meta-row .cur-letter{
+    color: var(--text);
+  }
+  .meta-row b{ color: var(--primary); font-weight:700; }
+
+  /* Entries table */
+  .entry-col-title{ width: 26%; }
+  .entry-col-desc{ }
+  .entry-col-bian{ width: 26%; text-align:right; }
+  .e-title{
+    display:flex; align-items:baseline; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .e-title .han{
+    font-size: clamp(16px, 1.4vw, 22px);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+  .e-title .py{
+    color: var(--text-mute);
+    font-style: italic;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .e-desc{ font-size: 14.5px; color: var(--text-mid); line-height: 1.65; }
+  .e-bian{ font-size: 14px; color: var(--text-mute); }
+  .e-bian b{ color: var(--text-mid); font-weight:500; }
+  .e-bian .num{ color: var(--primary); font-weight: 700; margin-left: 4px; }
+
+  @media (max-width: 720px){
+    .az-bar a{ min-width: 32px; padding: 6px 2px; font-size: 14px; }
+    .entry-col-bian{ width: auto; text-align:left; }
+    .e-title{ flex-direction: column; gap: 4px; align-items:flex-start; }
+    .e-title .han{ font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html" class="active">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html" class="active">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
+
+<section class="hero hero-page">
+  <div class="landscape-bg" aria-hidden="true"></div>
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+  <div class="hero-inner">
+    <nav class="crumbs">
+      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <span class="cur">按音序瀏覽</span>
+    </nav>
+    <h1 class="title-page">按音序<span class="red">瀏覽</span></h1>
+    <p class="sub-page">按漢語拼音音序（A–Z）瀏覽辭條，共收錄 <b id="totalEntries" style="color:var(--primary)">…</b> 條詞目。</p>
+  </div>
+</section>
+
+<section class="container" style="padding-bottom: 60px;">
+
+  <!-- A-Z navigation -->
+  <div class="az-bar" id="azBar"></div>
+
+  <!-- Meta row -->
+  <div class="meta-row">
+    <div>當前字母：<b id="curLetter" class="cur-letter">A</b></div>
+    <div>共 <b id="letterCount">0</b> 條辭條</div>
+  </div>
+
+  <!-- Table -->
+  <table class="dt-table" id="entriesTable">
+    <thead>
+      <tr>
+        <th class="entry-col-title">辭條</th>
+        <th class="entry-col-desc">釋義・分類簡述</th>
+        <th class="entry-col-bian">所屬編類・編號</th>
+      </tr>
+    </thead>
+    <tbody id="entriesBody"></tbody>
+  </table>
+
+  <div class="pager" id="entriesPager"></div>
+  <div class="pager-meta" id="pagerMeta"></div>
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script src="site.js"></script>
+<script>
+  const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const PAGE_SIZE = 10;
+  let _entries = [];
+  let _byLetter = {};
+  let _curLetter = 'A';
+  let _curPage = 1;
+
+  // Initialize from hash if any
+  function getInitLetter(){
+    const h = (location.hash || '').replace('#','').toUpperCase();
+    return LETTERS.includes(h) ? h : 'A';
+  }
+
+  loadEntries().then(d => {
+    _entries = d || [];
+    document.getElementById('totalEntries').textContent = _entries.length.toLocaleString();
+    _byLetter = {};
+    LETTERS.forEach(L => _byLetter[L] = []);
+    _entries.forEach(e => {
+      const L = (e.pinyinInitial || '').toUpperCase();
+      if (LETTERS.includes(L)) _byLetter[L].push(e);
+    });
+    LETTERS.forEach(L => _byLetter[L].sort((a,b) => (a.pinyin || '').localeCompare(b.pinyin || '')));
+    renderAZ();
+    _curLetter = getInitLetter();
+    selectLetter(_curLetter);
+  });
+
+  function renderAZ(){
+    const bar = document.getElementById('azBar');
+    bar.innerHTML = LETTERS.map(L => {
+      const n = (_byLetter[L] || []).length;
+      const cls = n === 0 ? 'empty' : '';
+      return `<a data-l="${L}" class="${cls}">${L}</a>`;
+    }).join('');
+    bar.querySelectorAll('a[data-l]').forEach(a => {
+      a.addEventListener('click', () => {
+        if (a.classList.contains('empty')) return;
+        selectLetter(a.dataset.l);
+      });
+    });
+  }
+
+  function selectLetter(L){
+    _curLetter = L;
+    _curPage = 1;
+    location.hash = L;
+    document.querySelectorAll('#azBar a').forEach(a => {
+      a.classList.toggle('cur', a.dataset.l === L && !a.classList.contains('empty'));
+    });
+    document.getElementById('curLetter').textContent = L;
+    const list = _byLetter[L] || [];
+    document.getElementById('letterCount').textContent = list.length.toLocaleString();
+    renderTable();
+  }
+
+  function renderTable(){
+    const list = _byLetter[_curLetter] || [];
+    const tbody = document.getElementById('entriesBody');
+    const start = (_curPage - 1) * PAGE_SIZE;
+    const page = list.slice(start, start + PAGE_SIZE);
+    if (page.length === 0){
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 50px 20px; color: var(--text-mute);">此字母下暫無辭條</td></tr>`;
+    } else {
+      tbody.innerHTML = page.map(e => {
+        const idStr = String(e.id).padStart(3, '0');
+        const jie = e.jie ? `／ ${esc(e.jie)}` : '';
+        const xiao = e.xiao && e.xiao !== e.title ? `<br><span style="color:var(--text-mute);font-size:13px;">${esc(e.xiao)}</span>` : '';
+        return `<tr>
+          <td><div class="e-title"><span class="han">${esc(e.title)}</span><span class="py">［${esc(e.pinyin || '')}］</span></div></td>
+          <td class="e-desc">${esc(e.zhang || '')}${jie}${xiao}</td>
+          <td class="e-bian"><b>${esc(e.bian || '')}</b><span class="num">／ ${idStr}</span></td>
+        </tr>`;
+      }).join('');
+    }
+    const pager = document.getElementById('entriesPager');
+    renderPager(pager, list.length, PAGE_SIZE, _curPage, p => {
+      _curPage = p;
+      renderTable();
+      document.querySelector('.dt-table').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    document.getElementById('pagerMeta').textContent = list.length
+      ? `共 ${list.length.toLocaleString()} 條辭條`
+      : '';
+  }
+</script>
+</body>
+</html>

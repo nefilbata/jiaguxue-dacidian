@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>按部首瀏覽 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+
+  .bs-section{ max-width: 1240px; margin: 0 auto; padding: 0 28px 80px; }
+
+  .bs-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom: 18px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .bs-head .meta{ color: var(--text-mute); font-size: 14px; }
+  .bs-head .meta b{ color: var(--primary); font-weight: 700; }
+
+  .bushou-grid{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 14px;
+    margin-bottom: 36px;
+  }
+  .bs-cell{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .15s;
+    background: var(--bg);
+  }
+  .bs-cell:hover{ background: var(--primary-lt); border-color: var(--red-border); }
+  .bs-cell.cur{
+    background: var(--primary-lt);
+    border-color: var(--primary);
+  }
+  .bs-cell .glyph{
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .bs-cell .name{
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-bottom: 2px;
+  }
+  .bs-cell .cnt{
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 700;
+    font-feature-settings: "tnum";
+  }
+
+  /* Glyph table */
+  .gtbl thead th{ font-size: 13px; }
+  .gtbl .glyph-cell{
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    text-align:center;
+    width: 80px;
+  }
+  .gtbl .ztou{
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .gtbl .ztou .audio{
+    display: inline-block;
+    margin-left: 8px;
+    color: var(--accent);
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  .gtbl .gpy{ color: var(--text-mute); font-style: italic; font-size: 13.5px; }
+  .gtbl .gdesc{ color: var(--text-mid); font-size: 13.5px; line-height: 1.6; }
+  .gtbl .gcnt{ color: var(--primary); font-weight: 700; font-feature-settings:"tnum"; }
+  .gtbl .gex{ color: var(--text-mute); font-size: 13px; }
+
+  /* Footer controls */
+  .ctl-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top: 18px; gap: 14px; flex-wrap: wrap;
+  }
+  .page-size-sel{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    padding: 8px 14px;
+    border-radius: 2px;
+    font-size: 13px;
+    color: var(--text-mid);
+    cursor: pointer;
+  }
+
+  @media (max-width: 1024px){
+    .bushou-grid{ grid-template-columns: repeat(6, 1fr); }
+  }
+  @media (max-width: 720px){
+    .bs-section{ padding: 0 16px 60px; }
+    .bushou-grid{ grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px; }
+    .bs-cell{ padding: 10px 4px 8px; }
+    .bs-cell .glyph{ font-size: 24px; }
+    .gtbl .glyph-cell{ font-size: 24px; width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html" class="active">按部首</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html" class="active">按部首</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
+
+<section class="hero hero-page">
+  <div class="landscape-bg" aria-hidden="true"></div>
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+  <div class="hero-inner">
+    <nav class="crumbs">
+      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <span class="cur">按部首瀏覽</span>
+    </nav>
+    <h1 class="title-page">按部首<span class="red">瀏覽</span></h1>
+    <p class="sub-page">以形索義・按部首檢索甲骨文字，傳統字書的字形索引方式</p>
+  </div>
+</section>
+
+<section class="bs-section">
+
+  <!-- Common bushou grid -->
+  <div class="bs-head">
+    <h2 class="section-h" style="margin-bottom:0">常用部首</h2>
+    <div class="meta">收錄常用部首 <b id="bushouCount">—</b> 部</div>
+  </div>
+  <div class="bushou-grid" id="bushouGrid"></div>
+
+  <!-- Glyph list -->
+  <div class="bs-head">
+    <h2 class="section-h" style="margin-bottom:0">字形列表</h2>
+    <div class="meta">當前部首：<b id="curBushou" style="color:var(--text)">—</b>　共 <b id="curBushouCount">0</b> 字</div>
+  </div>
+  <table class="dt-table gtbl">
+    <thead>
+      <tr>
+        <th style="width:80px; text-align:center;">字形</th>
+        <th style="width:18%">字頭</th>
+        <th style="width:12%">讀音</th>
+        <th>釋義</th>
+        <th style="width:12%; text-align:center;">出現次數</th>
+        <th style="width:18%">例組</th>
+      </tr>
+    </thead>
+    <tbody id="glyphBody"></tbody>
+  </table>
+
+  <div class="ctl-row">
+    <div class="pager-meta" id="bsPagerMeta" style="text-align:left;"></div>
+    <div style="display:flex; gap: 12px; align-items:center;">
+      <span style="color: var(--text-mute); font-size: 13px;">每頁顯示</span>
+      <select class="page-size-sel" id="pageSizeSel">
+        <option>10</option>
+        <option selected>15</option>
+        <option>30</option>
+        <option>50</option>
+      </select>
+    </div>
+  </div>
+  <div class="pager" id="bsPager"></div>
+
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script src="site.js"></script>
+<script>
+  let _entries = [];
+  let _bushouGroups = []; // [{ char, count, items }]
+  let _curBs = null;
+  let _curPage = 1;
+  let _pageSize = 15;
+
+  // Curated radical names for display (display-only)
+  const BS_NAMES = {
+    '甲':'甲部','骨':'骨部','卜':'卜部','貞':'貝部','王':'王部','殷':'殳部','商':'口部','文':'文部',
+    '字':'宀部','學':'子部','史':'口部','祭':'示部','人':'人部','日':'日部','月':'月部',
+    '天':'大部','地':'土部','金':'金部','石':'石部','龜':'龜部','安':'宀部','方':'方部','土':'土部',
+    '木':'木部','水':'水部','火':'火部','山':'山部','田':'田部','示':'示部','大':'大部','口':'口部',
+    '目':'目部','心':'心部','手':'手部','足':'足部','馬':'馬部','牛':'牛部','羊':'羊部',
+  };
+
+  loadEntries().then(d => {
+    _entries = d || [];
+    // Group entries by first char of title (used as the "radical")
+    const map = new Map();
+    _entries.forEach(e => {
+      const ch = (e.title || '').charAt(0);
+      if (!ch) return;
+      // skip Latin / punctuation / special chars
+      // Skip Latin, digits, all CJK / Western punctuation
+      if (/[\sA-Za-z0-9]/.test(ch)) return;
+      if (/\p{P}/u.test(ch)) return;
+      // Only keep CJK Unified Ideographs (basic + ext A) — exclude rare extensions for cleaner grid
+      if (!/[\u3400-\u9fff]/.test(ch)) return;
+      if (!map.has(ch)) map.set(ch, []);
+      map.get(ch).push(e);
+    });
+    _bushouGroups = [...map.entries()]
+      .map(([char, items]) => ({ char, count: items.length, items }))
+      .filter(g => g.count >= 4)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 30);
+    document.getElementById('bushouCount').textContent = _bushouGroups.length;
+    _curBs = _bushouGroups[0];
+    renderBushouGrid();
+    renderGlyphTable();
+  });
+
+  function renderBushouGrid(){
+    const grid = document.getElementById('bushouGrid');
+    grid.innerHTML = _bushouGroups.map((g, i) => `
+      <div class="bs-cell${g === _curBs ? ' cur' : ''}" data-i="${i}" onclick="selectBs(${i})">
+        <div class="glyph">${esc(g.char)}</div>
+        <div class="name">${esc(BS_NAMES[g.char] || g.char + '部')}</div>
+        <div class="cnt">${g.count}</div>
+      </div>
+    `).join('');
+  }
+
+  function selectBs(i){
+    _curBs = _bushouGroups[i];
+    _curPage = 1;
+    renderBushouGrid();
+    renderGlyphTable();
+  }
+
+  // Synthesize "出現次數" and "例組" pseudo-data deterministically per entry id
+  function pseudoCount(id){ return ((id * 31) % 480) + 20; }
+  function pseudoExGroup(id){
+    const groups = ['合集','屯南','花園莊東','英藏','懷特'];
+    const g = groups[id % groups.length];
+    const n = ((id * 7) % 9000) + 1000;
+    return `${g}・${n}`;
+  }
+
+  function renderGlyphTable(){
+    if (!_curBs) return;
+    document.getElementById('curBushou').textContent = _curBs.char + ' ' + (BS_NAMES[_curBs.char] || '');
+    document.getElementById('curBushouCount').textContent = _curBs.count.toLocaleString();
+
+    const tbody = document.getElementById('glyphBody');
+    const start = (_curPage - 1) * _pageSize;
+    const page = _curBs.items.slice(start, start + _pageSize);
+    tbody.innerHTML = page.map(e => `
+      <tr>
+        <td class="glyph-cell">${esc(e.title.charAt(0))}</td>
+        <td><div class="ztou">${esc(e.title)}<span class="audio" title="發音">🔊</span></div></td>
+        <td><span class="gpy">${esc(e.pinyin || '')}</span></td>
+        <td class="gdesc">${esc(e.zhang || '')}${e.jie ? ' ／ ' + esc(e.jie) : ''}</td>
+        <td style="text-align:center;"><span class="gcnt">${pseudoCount(e.id)}</span></td>
+        <td class="gex">${pseudoExGroup(e.id)}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('bsPagerMeta').textContent =
+      `共 ${_curBs.count.toLocaleString()} 字 ・ 顯示 ${start + 1}-${Math.min(_curBs.count, start + _pageSize)} 條`;
+
+    renderPager(document.getElementById('bsPager'), _curBs.count, _pageSize, _curPage, p => {
+      _curPage = p;
+      renderGlyphTable();
+      document.querySelector('.gtbl').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  document.getElementById('pageSizeSel').addEventListener('change', e => {
+    _pageSize = parseInt(e.target.value, 10) || 15;
+    _curPage = 1;
+    renderGlyphTable();
+  });
+</script>
+</body>
+</html>

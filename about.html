@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>關於本辭典 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+
+  .about-wrap{
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px 80px;
+  }
+
+  .intro-block{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 40px 44px;
+    margin-bottom: 36px;
+  }
+  .intro-block p{
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: var(--text-mid);
+    text-align: justify;
+    margin: 0 0 16px;
+  }
+  .intro-block p:last-child{ margin-bottom: 0; }
+
+  .feature-row{
+    display:flex; gap: 24px; padding: 22px 0;
+    border-top: 1px dashed var(--border-lt);
+  }
+  .feature-row:first-of-type{ border-top: 0; }
+  .feature-row .label{
+    flex-shrink: 0;
+    width: 120px;
+    color: var(--text-mute);
+    font-size: 14px;
+    padding-top: 2px;
+  }
+  .feature-row .label span{
+    display:inline-block;
+    border-left: 2px solid var(--primary);
+    padding-left: 10px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  .feature-row .body{ flex:1; color: var(--text-mid); font-size: 15px; line-height: 1.85; }
+
+  /* Usage grid */
+  .usage-grid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .usage-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 24px 26px;
+    transition: all .15s;
+  }
+  .usage-card:hover{ border-color: var(--red-border); }
+  .usage-card .ico{
+    width: 38px; height: 38px;
+    border: 1.4px solid var(--accent);
+    color: var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 3px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .usage-card .ico svg{ width: 20px; height: 20px; }
+  .usage-card h3{
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .usage-card p{
+    color: var(--text-mute);
+    font-size: 13.5px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .copyright{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    padding: 24px 28px;
+    border-radius: 3px;
+    font-size: 13px;
+    color: var(--text-mute);
+    line-height: 1.85;
+    text-align: center;
+  }
+  .copyright b{ color: var(--text-mid); font-weight: 700; }
+  .copyright .sep{ color: var(--border); margin: 0 8px; }
+
+  @media (max-width: 720px){
+    .about-wrap{ padding: 0 16px 60px; }
+    .intro-block{ padding: 26px 22px; }
+    .usage-grid{ grid-template-columns: 1fr; }
+    .feature-row{ flex-direction: column; gap: 8px; padding: 18px 0; }
+    .feature-row .label{ width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html" class="active">關於本辭典</a>
+  </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html" class="active">關於本辭典</a>
+</div>
+
+<section class="hero hero-page">
+  <div class="landscape-bg" aria-hidden="true"></div>
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+  <div class="hero-inner">
+    <nav class="crumbs">
+      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <span class="cur">關於本辭典</span>
+    </nav>
+    <h1 class="title-page">關於<span class="red">本辭典</span></h1>
+    <p class="sub-page">辭典編纂沿革、使用説明與版權聲明</p>
+  </div>
+</section>
+
+<section class="about-wrap">
+
+  <!-- Intro -->
+  <div>
+    <h2 class="section-h">辭典介紹</h2>
+    <div class="intro-block">
+      <p>《甲骨學大辭典》由鄭州大學漢字文明研究中心組織編纂，是一部系統收錄甲骨學相關術語、器物、文物、語言文字、歷史文獻、研究成果與學術流派的綜合性工具書。全書共收條目 <b style="color:var(--primary);">3,881</b> 條，分爲六編，力求準確、簡明、實用，並注重學術性與可檢索性相結合。</p>
+      <p>本辭典的編纂以多年甲骨學基礎研究爲依託，吸收百餘年來海内外甲骨學研究成果，並結合最新出土材料及學界共識，係甲骨學研究與相關學科不可或缺的參考工具，亦可服務於高等院校相關專業之教學。</p>
+
+      <div class="feature-row">
+        <div class="label"><span>編纂體例</span></div>
+        <div class="body">採用六編體例為總綱：理論術語編、考古文物編、語言文字編、歷史文獻編、研究成果編、活動影響編，並於每編之下細分章節，便於按學科視角查閲。</div>
+      </div>
+      <div class="feature-row">
+        <div class="label"><span>檢索方式</span></div>
+        <div class="body">支援按音序（A–Z）、部首、編類三種傳統檢索方式，並設關鍵字搜索可同時匹配詞條名稱、漢語拼音與所屬編類。</div>
+      </div>
+      <div class="feature-row">
+        <div class="label"><span>數據規模</span></div>
+        <div class="body">當前收錄詞條 <b style="color:var(--primary);">3,881</b> 條，下分 <b style="color:var(--primary);">六編</b>、<b style="color:var(--primary);">26</b> 個音序索引。Phase 2 將接入原書掃描圖頁與引文書影。</div>
+      </div>
+      <div class="feature-row">
+        <div class="label"><span>適用對象</span></div>
+        <div class="body">面向甲骨學、古文字學、商周歷史、考古學、漢語史等相關專業師生與研究者，以及對中華傳統文化感興趣的讀者。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage -->
+  <div>
+    <h2 class="section-h">使用説明</h2>
+    <div class="usage-grid">
+      <a class="usage-card" href="pinyin.html">
+        <div class="ico">A·Z</div>
+        <h3>按音序檢索</h3>
+        <p>依漢語拼音首字母（A–Z）排序瀏覽辭條。適於記得讀音、需快速定位某條的場景。</p>
+      </a>
+      <a class="usage-card" href="bushou.html">
+        <div class="ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h14v16H5z M9 4v16 M5 9h4 M5 14h4"/></svg>
+        </div>
+        <h3>按部首檢索</h3>
+        <p>傳統字書索引方式，依首字部首歸類查找。適於只記得字形、不確知讀音的情況。</p>
+      </a>
+      <a class="usage-card" href="bian.html">
+        <div class="ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h3v16H5z M10.5 4h3v16h-3z M16 4h3v16h-3z"/></svg>
+        </div>
+        <h3>按編類瀏覽</h3>
+        <p>按六編學科體例瀏覽，適於系統研究某一專題或希望瞭解辭典整體編排者。</p>
+      </a>
+      <a class="usage-card" href="index.html">
+        <div class="ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        </div>
+        <h3>關鍵字搜索</h3>
+        <p>在首頁搜索框輸入詞條、拼音（可不含聲調）或關鍵字，全庫即時匹配檢索。</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Copyright -->
+  <div class="copyright">
+    <div><b>版權聲明</b></div>
+    <div style="margin-top:8px;">
+      © 2025 鄭州大學漢字文明研究中心 <span class="sep">·</span>
+      《甲骨學大辭典》編纂委員會 <span class="sep">·</span>
+      保留所有權利
+    </div>
+    <div style="margin-top:8px;">
+      本網站內容僅供學術研究與教學參考，未經書面許可不得用於商業用途。
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

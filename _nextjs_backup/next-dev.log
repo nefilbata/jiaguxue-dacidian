@@ -1,0 +1,60 @@
+
+> jiaguxue-dacidian@0.1.0 dev
+> next dev --webpack -p 3001
+
+   ▲ Next.js 16.0.0 (webpack)
+   - Local:        http://localhost:3001
+   - Network:      http://10.171.100.65:3001
+
+ ✓ Starting...
+   Skipping creating a lockfile at D:\Desktop\make progress\jiaguxue-dacidian\.next\dev\lock because we're using WASM bindings
+
+   We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+   The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+   	- include was updated to add '.next\dev/types/**/*.ts'
+   	- include was updated to add '.next\dev/types/**/*.ts'
+
+ ✓ Ready in 1513ms
+ GET / 200 in 3.2s (compile: 3.1s, render: 90ms)
+ GET / 200 in 51ms (compile: 5ms, render: 46ms)
+ GET / 200 in 58ms (compile: 9ms, render: 49ms)
+ GET / 200 in 32ms (compile: 3ms, render: 28ms)
+ GET / 200 in 57ms (compile: 3ms, render: 54ms)
+ GET / 200 in 31ms (compile: 4ms, render: 27ms)
+ GET / 200 in 4.7s (compile: 4.6s, render: 115ms)
+ GET / 200 in 63ms (compile: 9ms, render: 54ms)
+ GET / 200 in 36ms (compile: 5ms, render: 31ms)
+ GET / 200 in 134ms (compile: 31ms, render: 103ms)
+ GET / 200 in 30ms (compile: 4ms, render: 27ms)
+ GET / 500 in 2.3s (compile: 80ms, render: 2.2s)
+ ○ Compiling /_error ...
+ GET / 500 in 3.0s (compile: 2.9s, render: 110ms)
+ GET / 500 in 10ms (compile: 4ms, render: 6ms)
+ GET / 500 in 12ms (compile: 5ms, render: 7ms)
+ GET / 200 in 313ms (compile: 195ms, render: 118ms)
+ GET /images/bone.png 404 in 467ms (compile: 435ms, render: 32ms)
+ GET /images/landscape.png 404 in 20ms (compile: 4ms, render: 16ms)
+ GET / 200 in 37ms (compile: 8ms, render: 29ms)
+ GET /pinyin 200 in 291ms (compile: 277ms, render: 14ms)
+ GET /bushou 200 in 280ms (compile: 266ms, render: 13ms)
+ GET / 200 in 12ms (compile: 4ms, render: 8ms)
+ GET /pinyin 200 in 15ms (compile: 5ms, render: 10ms)
+ GET /bushou 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /bian 200 in 327ms (compile: 311ms, render: 16ms)
+ GET /appendix 200 in 266ms (compile: 253ms, render: 13ms)
+ GET /about 200 in 252ms (compile: 235ms, render: 17ms)
+ GET / 200 in 22ms (compile: 7ms, render: 15ms)
+ GET /about 200 in 15ms (compile: 2ms, render: 13ms)
+ GET /appendix 200 in 19ms (compile: 7ms, render: 12ms)
+ GET /bian 200 in 20ms (compile: 8ms, render: 12ms)
+ GET /bushou 200 in 20ms (compile: 7ms, render: 12ms)
+ GET /pinyin 200 in 17ms (compile: 6ms, render: 11ms)
+ GET / 200 in 11ms (compile: 3ms, render: 8ms)
+ GET /pinyin 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /pinyin 200 in 56ms (compile: 4ms, render: 52ms)
+ GET / 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /pinyin 200 in 14ms (compile: 4ms, render: 9ms)
+ GET / 200 in 13ms (compile: 4ms, render: 9ms)
+ GET / 200 in 27ms (compile: 4ms, render: 23ms)
+ GET / 200 in 31ms (compile: 4ms, render: 27ms)

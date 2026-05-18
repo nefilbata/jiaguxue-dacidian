@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>附録 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .app-layout{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap: 28px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 28px 80px;
+  }
+
+  /* sidebar */
+  .app-side{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    align-self:start;
+    position: sticky;
+    top: 76px;
+    overflow: hidden;
+  }
+  .app-side ul{ list-style: none; padding: 8px 0; margin: 0; }
+  .app-side li a{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 22px;
+    color: var(--text-mid);
+    font-size: 15px;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+  }
+  .app-side li a:hover{ color: var(--primary); background: rgba(196,168,130,0.06); }
+  .app-side li.cur a{
+    background: var(--primary);
+    color: #fff;
+    border-left-color: var(--primary-dk);
+    font-weight: 700;
+  }
+  .app-side .deco{
+    height: 200px;
+    margin-top: 14px;
+    border-top: 1px solid var(--border-lt);
+    position:relative;
+    overflow:hidden;
+    background-image: url("images/landscape.png");
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 220% auto;
+    mix-blend-mode: multiply;
+    opacity: 0.45;
+  }
+  .app-side .deco::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(250,247,242,1) 0%, rgba(250,247,242,0.4) 35%, transparent 65%);
+  }
+
+  .desc-block{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 22px 28px;
+    margin-bottom: 22px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    font-size: 14.5px;
+  }
+
+  .ap-table thead th{ font-size: 13px; }
+  .ap-table .seq{ color: var(--text-mute); font-feature-settings:"tnum"; width: 70px; }
+  .ap-table thead .glyph-big{
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mute);
+    line-height: 1.4;
+  }
+  .ap-table tbody .glyph-big{
+    font-size: 30px;
+    text-align:center;
+    color: var(--text);
+    width: 90px;
+    font-weight: 700;
+  }
+  .ap-table .glyph-big{ width: 90px; text-align: center; }
+  .ap-table .lize{ font-size: 18px; font-weight: 700; }
+  .ap-table .py{ color: var(--primary); font-style: italic; font-size: 13.5px; }
+  .ap-table .yi{ color: var(--text-mid); font-size: 14px; }
+  .ap-table .ex{ color: var(--text-mute); font-size: 13px; }
+  .ap-table .zlu{ color: var(--text-mid); font-family: monospace; font-size: 13px; }
+
+  /* Ganzhi 10x6 grid */
+  .gz-grid{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    padding: 14px;
+    border-radius: 3px;
+  }
+  .gz-cell{
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    background: var(--bg);
+    border: 1px solid var(--border-lt);
+    padding: 14px 4px 10px;
+    border-radius: 2px;
+  }
+  .gz-cell .ch{ font-size: 24px; font-weight: 700; line-height: 1; }
+  .gz-cell .py{ font-size: 11px; color: var(--text-mute); margin-top: 4px; font-style: italic; }
+  .gz-cell.start{ background: var(--primary-lt); border-color: var(--red-border); }
+
+  .zhi-grid{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+  .zhi-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 18px;
+    text-align:center;
+  }
+  .zhi-card .big{ font-size: 36px; font-weight: 700; }
+  .zhi-card .py{ color: var(--primary); font-style:italic; font-size: 14px; margin-top: 4px; }
+  .zhi-card .zod{ font-size: 13px; color: var(--text-mute); margin-top: 8px; }
+  .zhi-card .hr{ font-size: 12px; color: var(--text-mid); margin-top: 6px; }
+
+  @media (max-width: 1024px){
+    .app-layout{ grid-template-columns: 1fr; }
+    .app-side{ position: static; }
+    .gz-grid{ grid-template-columns: repeat(6, 1fr); }
+    .zhi-grid{ grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 720px){
+    .app-layout{ padding: 0 16px 60px; }
+    .gz-grid{ grid-template-columns: repeat(5, 1fr); padding: 10px; }
+    .gz-cell .ch{ font-size: 20px; }
+    .zhi-grid{ grid-template-columns: repeat(3, 1fr); }
+    .zhi-card .big{ font-size: 30px; }
+    .ap-table .glyph-big{ font-size: 22px; width: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html" class="active">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html" class="active">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
+
+<section class="hero hero-page">
+  <div class="landscape-bg" aria-hidden="true"></div>
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+  <div class="hero-inner">
+    <nav class="crumbs">
+      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <span class="cur">附録</span>
+    </nav>
+    <h1 class="title-page">附 録</h1>
+    <p class="sub-page">附録收錄甲骨學研究中常用的表格與檢索資料・以供研究參考</p>
+  </div>
+</section>
+
+<section class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="app-side">
+    <ul id="appNav">
+      <li class="cur"><a href="#" data-tab="jiagu">甲骨文字表 <span style="opacity:.7;font-size:12px;">›</span></a></li>
+      <li><a href="#" data-tab="ganzhi">干支表 <span style="opacity:.5;font-size:12px;">›</span></a></li>
+      <li><a href="#" data-tab="dizhi">十二地支表 <span style="opacity:.5;font-size:12px;">›</span></a></li>
+      <li><a href="#" data-tab="zhenren">貞人分期表 <span style="opacity:.5;font-size:12px;">›</span></a></li>
+      <li><a href="#" data-tab="shixi">商代世系表 <span style="opacity:.5;font-size:12px;">›</span></a></li>
+      <li><a href="#" data-tab="diming">重要地名表 <span style="opacity:.5;font-size:12px;">›</span></a></li>
+    </ul>
+    <div class="deco" aria-hidden="true"></div>
+  </aside>
+
+  <!-- Main -->
+  <div id="appMain"></div>
+
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script>
+  // ===== Data for each tab =====
+  const JIAGU_DATA = [
+    {seq:'001', glyph:'日', li:'日', py:'rì',    yi:'太陽。象太陽之形，圓形中常加一點。', ex:'合集 6571', zlu:'H6571'},
+    {seq:'002', glyph:'月', li:'月', py:'yuè',   yi:'月亮。象上弦月之形。',                ex:'合集 17456', zlu:'H17456'},
+    {seq:'003', glyph:'山', li:'山', py:'shān',  yi:'山。象三峰連立。',                    ex:'合集 27042', zlu:'H27042'},
+    {seq:'004', glyph:'水', li:'水', py:'shuǐ',  yi:'水。象川流之形。',                    ex:'合集 28628', zlu:'H28628'},
+    {seq:'005', glyph:'雨', li:'雨', py:'yǔ',    yi:'雨。象天降水滴之狀。',                ex:'合集 12863', zlu:'H12863'},
+    {seq:'006', glyph:'木', li:'木', py:'mù',    yi:'樹。象有枝葉根榦之木。',              ex:'合集 32384', zlu:'H32384'},
+    {seq:'007', glyph:'人', li:'人', py:'rén',   yi:'象側立之人形。',                      ex:'合集 1027', zlu:'H1027'},
+    {seq:'008', glyph:'子', li:'子', py:'zǐ',    yi:'象襁褓中嬰兒之形。',                  ex:'合集 6664', zlu:'H6664'},
+    {seq:'009', glyph:'女', li:'女', py:'nǚ',    yi:'象跪坐之女子。',                      ex:'合集 19890', zlu:'H19890'},
+    {seq:'010', glyph:'目', li:'目', py:'mù',    yi:'象人目之形，橫置。',                  ex:'合集 21043', zlu:'H21043'},
+    {seq:'011', glyph:'口', li:'口', py:'kǒu',   yi:'象人口之形。',                        ex:'合集 6948',  zlu:'H6948'},
+    {seq:'012', glyph:'手', li:'又', py:'yòu',   yi:'象右手之形。',                        ex:'合集 27052', zlu:'H27052'},
+    {seq:'013', glyph:'止', li:'止', py:'zhǐ',   yi:'象足趾之形，與動作相關。',            ex:'合集 248',   zlu:'H248'},
+    {seq:'014', glyph:'王', li:'王', py:'wáng',  yi:'象斧鉞之形，象徵王權。',              ex:'合集 36537', zlu:'H36537'},
+    {seq:'015', glyph:'示', li:'示', py:'shì',   yi:'象神主之形，與祭祀相關。',            ex:'合集 14202', zlu:'H14202'},
+    {seq:'016', glyph:'貞', li:'貞', py:'zhēn',  yi:'象鼎卜之形，問卜。',                  ex:'合集 11497', zlu:'H11497'},
+    {seq:'017', glyph:'卜', li:'卜', py:'bǔ',    yi:'象卜骨灼裂紋。',                      ex:'合集 6057',  zlu:'H6057'},
+    {seq:'018', glyph:'龜', li:'龜', py:'guī',   yi:'象龜之形，所卜之介。',                ex:'合集 6571',  zlu:'H6571'},
+  ];
+
+  const GAN = [
+    ['甲','jiǎ'],['乙','yǐ'],['丙','bǐng'],['丁','dīng'],['戊','wù'],
+    ['己','jǐ'],['庚','gēng'],['辛','xīn'],['壬','rén'],['癸','guǐ'],
+  ];
+  const ZHI = [
+    ['子','zǐ'],['丑','chǒu'],['寅','yín'],['卯','mǎo'],['辰','chén'],['巳','sì'],
+    ['午','wǔ'],['未','wèi'],['申','shēn'],['酉','yǒu'],['戌','xū'],['亥','hài'],
+  ];
+  const ZODIAC = ['鼠','牛','虎','兔','龍','蛇','馬','羊','猴','雞','狗','豬'];
+  const HOURS  = ['23–01','01–03','03–05','05–07','07–09','09–11','11–13','13–15','15–17','17–19','19–21','21–23'];
+
+  // 60甲子
+  function buildGanzhi(){
+    const arr = [];
+    for (let i = 0; i < 60; i++){
+      const g = GAN[i % 10];
+      const z = ZHI[i % 12];
+      arr.push({ ch: g[0] + z[0], py: g[1] + ' ' + z[1] });
+    }
+    return arr;
+  }
+
+  // ===== Renderers =====
+  const render = {
+    jiagu(){
+      return `
+        <h2 class="section-h">甲骨文字表</h2>
+        <div class="desc-block">本表收錄《甲骨學大辭典》所涉常用甲骨文字頭，按字形類別依次排列。每字附隸定字、拼音、釋義、出組例與著録號，便於檢索與參照。當前共收錄常用字頭 <b style="color:var(--primary)">${JIAGU_DATA.length}</b> 條，完整數據將隨二期上線。</div>
+        <table class="dt-table ap-table">
+          <thead>
+            <tr>
+              <th class="seq">序號</th>
+              <th class="glyph-big" style="width:90px;">甲骨文字形</th>
+              <th style="width:12%">隸定字</th>
+              <th style="width:12%">拼音</th>
+              <th>釋義</th>
+              <th style="width:14%">出組例</th>
+              <th style="width:12%">著録號</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${JIAGU_DATA.map(r => `
+              <tr>
+                <td class="seq">${r.seq}</td>
+                <td class="glyph-big">${esc(r.glyph)}</td>
+                <td class="lize">${esc(r.li)}</td>
+                <td class="py">${esc(r.py)}</td>
+                <td class="yi">${esc(r.yi)}</td>
+                <td class="ex">${esc(r.ex)}</td>
+                <td class="zlu">${esc(r.zlu)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="pager-meta" style="margin-top:18px;">共 ${JIAGU_DATA.length} 條 ・ 完整文字表將於 Phase 2 上線</div>
+      `;
+    },
+    ganzhi(){
+      const gz = buildGanzhi();
+      return `
+        <h2 class="section-h">干支表（六十甲子）</h2>
+        <div class="desc-block">天干十、地支十二相配為六十甲子，是中國傳統紀年、紀日的基本方式。甲骨卜辭中以干支紀日，幾乎見於每片卜辭之首。下表為完整的六十甲子循環，左上角朱紅標記為循環之始「甲子」。</div>
+        <div class="gz-grid">
+          ${gz.map((it, i) => `
+            <div class="gz-cell${i===0?' start':''}">
+              <div class="ch">${esc(it.ch)}</div>
+              <div class="py">${esc(it.py)}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <h2 class="section-h" style="margin-top:36px;">天干（十干）</h2>
+        <div class="zhi-grid" style="grid-template-columns:repeat(10,1fr);">
+          ${GAN.map(([c,p]) => `<div class="zhi-card"><div class="big">${c}</div><div class="py">${p}</div></div>`).join('')}
+        </div>
+      `;
+    },
+    dizhi(){
+      return `
+        <h2 class="section-h">十二地支表</h2>
+        <div class="desc-block">十二地支起源於上古天文觀察，後與生肖、時辰、方位相配。在甲骨卜辭中，地支多與天干組合紀日；商代亦見以地支為地名、方位或人名者。下表列出十二地支與對應生肖、時辰。</div>
+        <div class="zhi-grid">
+          ${ZHI.map(([c,p], i) => `
+            <div class="zhi-card">
+              <div class="big">${c}</div>
+              <div class="py">${p}</div>
+              <div class="zod">生肖・${ZODIAC[i]}</div>
+              <div class="hr">${HOURS[i]} 時</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    },
+    zhenren(){
+      const periods = [
+        { name:'武丁期', span:'第一期', persons:['賓','爭','㱿','韋','古','永','亘','㬎'] },
+        { name:'祖庚祖甲期', span:'第二期', persons:['出','大','行','即','尹','旅'] },
+        { name:'廩辛康丁期', span:'第三期', persons:['彭','寧','犬','逐','何','口','宁'] },
+        { name:'武乙文丁期', span:'第四期', persons:['歷','犁','史','犬','令'] },
+        { name:'帝乙帝辛期', span:'第五期', persons:['黃','泳','立'] },
+      ];
+      return `
+        <h2 class="section-h">貞人分期表</h2>
+        <div class="desc-block">貞人為商代主持占卜之專職史官。據董作賓「五期說」，可依貞人之名與書體風格將甲骨卜辭分為五期。下表列舉各期之代表貞人。</div>
+        <table class="dt-table ap-table">
+          <thead>
+            <tr>
+              <th style="width:14%">分期</th>
+              <th style="width:18%">王世</th>
+              <th>主要貞人</th>
+              <th style="width:14%; text-align:right;">人數</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${periods.map(p => `
+              <tr>
+                <td><b style="color:var(--primary);">${p.span}</b></td>
+                <td class="lize">${p.name}</td>
+                <td class="yi">${p.persons.map(x => `<span style="display:inline-block; margin-right:14px; font-weight:700; font-size:17px; color:var(--text);">${x}</span>`).join('')}</td>
+                <td style="text-align:right;"><b style="color:var(--primary);">${p.persons.length}</b> 人</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    },
+    shixi(){
+      const kings = [
+        '上甲','報乙','報丙','報丁','示壬','示癸',
+        '大乙(成湯)','大丁','卜丙','仲壬','大甲','沃丁','大庚','小甲','雍己','大戊','仲丁','外壬','河亶甲',
+        '祖乙','祖辛','沃甲','祖丁','南庚','陽甲','盤庚','小辛','小乙',
+        '武丁','祖庚','祖甲','廩辛','康丁','武乙','文丁','帝乙','帝辛(紂)'
+      ];
+      return `
+        <h2 class="section-h">商代世系表</h2>
+        <div class="desc-block">商代世系依《史記・殷本紀》與甲骨卜辭周祭表復原。前六位為「先公」，其後為自成湯立國至帝辛亡國凡三十王。下表按世序排列。</div>
+        <table class="dt-table ap-table">
+          <thead>
+            <tr>
+              <th style="width:80px;">世次</th>
+              <th>王號／廟號</th>
+              <th style="width:30%;">分期</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${kings.map((k, i) => `
+              <tr>
+                <td class="seq">${(i+1).toString().padStart(2,'0')}</td>
+                <td class="lize">${k.replace(/\((.+?)\)/, '<span style="color:var(--text-mute); font-weight: 400; font-size: 13px; margin-left: 6px;">（$1）</span>')}</td>
+                <td class="ex">${i<6?'先公':(i<19?'早商':(i<29?'中商':'晚商'))}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    },
+    diming(){
+      const places = [
+        ['殷','yīn','商之京邑，今河南安陽小屯一帶'],
+        ['亳','bó','成湯所建之都，地望尚有爭議'],
+        ['朝歌','zhāo gē','帝乙、帝辛之離宮，今河南淇縣'],
+        ['沬','mèi','即朝歌一帶'],
+        ['敦','dūn','西土地名，與羌人相關'],
+        ['鬼方','guǐ fāng','北方部族，與商交戰頻繁'],
+        ['土方','tǔ fāng','北方部族，武丁時期常見'],
+        ['䂕方','gōng fāng','西北部族'],
+        ['人方','rén fāng','東方部族，帝辛東征'],
+        ['夷','yí','東方諸夷之統稱'],
+        ['周','zhōu','西方諸侯國，後滅商'],
+        ['羌','qiāng','西部部族，常作犧牲'],
+      ];
+      return `
+        <h2 class="section-h">重要地名表</h2>
+        <div class="desc-block">商代卜辭中所見地名約二千餘，本表選録與政治、軍事、祭祀直接相關之重要地名，並附今地考。</div>
+        <table class="dt-table ap-table">
+          <thead>
+            <tr>
+              <th class="seq">序號</th>
+              <th style="width:14%">地名</th>
+              <th style="width:14%">拼音</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${places.map(([n,p,d], i) => `
+              <tr>
+                <td class="seq">${(i+1).toString().padStart(3,'0')}</td>
+                <td class="lize" style="font-size:20px;">${n}</td>
+                <td class="py">${p}</td>
+                <td class="yi">${d}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    },
+  };
+
+  function selectTab(tab){
+    document.querySelectorAll('#appNav li').forEach(li => {
+      li.classList.toggle('cur', li.querySelector('a').dataset.tab === tab);
+    });
+    document.getElementById('appMain').innerHTML = render[tab]();
+    window.scrollTo({top: document.querySelector('.app-layout').offsetTop - 70, behavior: 'smooth'});
+  }
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  function toggleMobileMenu(){
+    const m = document.getElementById('mmenu');
+    if (m) m.classList.toggle('open');
+  }
+
+  document.querySelectorAll('#appNav a').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); selectTab(a.dataset.tab); });
+  });
+
+  // initial
+  selectTab('jiagu');
+</script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>按編類瀏覽 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+
+  .bian-layout{
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 28px;
+    padding: 0 28px 80px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  /* Sidebar */
+  .side{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    position: sticky;
+    top: 76px;
+    align-self: start;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+  }
+  .side-head{
+    display:flex; align-items:center; gap: 10px;
+    padding: 18px 22px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border-lt);
+    font-size: 16px;
+  }
+  .side-head svg{ width: 18px; height: 18px; color: var(--accent); }
+  .side-list{ padding: 8px 0; }
+  .side-item{ }
+  .side-bian{
+    padding: 13px 22px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15.5px;
+    color: var(--text);
+    font-weight: 500;
+    transition: background .15s;
+    border-left: 3px solid transparent;
+  }
+  .side-bian:hover{ background: rgba(196,168,130,0.08); }
+  .side-bian.active{
+    background: var(--primary);
+    color: #fff;
+    border-left-color: var(--primary-dk);
+  }
+  .side-bian.active .count{ color: rgba(255,255,255,0.85); }
+  .side-bian .count{ font-size: 13px; color: var(--text-mute); font-feature-settings: "tnum"; }
+  .side-bian .caret{
+    display:inline-block; width:0; height:0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: .6; margin-left: 2px;
+    transition: transform .15s;
+  }
+  .side-item.open .caret{ transform: rotate(-180deg); }
+  .side-zhangs{
+    display:none;
+    padding: 4px 22px 12px 32px;
+    border-bottom: 1px dashed var(--border-lt);
+  }
+  .side-item.open .side-zhangs{ display:block; }
+  .side-zhang{
+    display:flex; justify-content:space-between; align-items:center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 13.5px;
+    color: var(--text-mute);
+    cursor: pointer;
+  }
+  .side-zhang::before{
+    content: "·"; color: var(--accent); margin-right: 4px;
+  }
+  .side-zhang:hover{ color: var(--primary); }
+  .side-zhang.cur{ color: var(--primary); font-weight: 700; }
+  .side-foot{
+    padding: 14px 22px;
+    border-top: 1px solid var(--border-lt);
+    color: var(--text-mute);
+    font-size: 13px;
+    background: rgba(212,196,168,0.06);
+  }
+  .side-foot b{ color: var(--primary); font-weight: 700; }
+
+  /* Main */
+  .bian-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 28px 32px;
+    display:flex; gap: 22px; align-items:flex-start;
+    margin-bottom: 24px;
+    position:relative; overflow:hidden;
+  }
+  .bian-card::before{
+    content:"";
+    position:absolute; right:-30px; bottom:-30px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(139,26,26,0.04), transparent 70%);
+    pointer-events:none;
+  }
+  .bian-num{
+    flex-shrink:0;
+    width: 64px; height: 64px;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 28px; font-weight: 700;
+    border-radius: 4px;
+  }
+  .bian-info h2{
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .bian-info h2 .tag{
+    display:inline-block;
+    font-size: 12px;
+    background: var(--primary-lt);
+    color: var(--primary);
+    border: 1px solid var(--red-border);
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  .bian-info p{
+    margin: 0;
+    color: var(--text-mid);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 680px;
+  }
+  .bian-info .count{
+    margin-top: 10px;
+    color: var(--text-mute);
+    font-size: 14px;
+  }
+  .bian-info .count b{ color: var(--primary); font-weight: 700; }
+
+  .chapter-list{ margin-bottom: 28px; }
+  .chap-table tbody td{ padding: 16px 22px; }
+  .chap-row .name{ font-weight: 700; font-size: 16px; color: var(--text); }
+  .chap-row .name span{ display:block; color: var(--text-mute); font-size: 12.5px; font-weight: 400; margin-top: 3px; }
+  .chap-row .cnum{ color: var(--primary); font-weight: 700; font-feature-settings: "tnum"; }
+
+  /* Featured */
+  .feat-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom: 16px;
+    flex-wrap:wrap; gap: 8px;
+  }
+  .feat-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .feat-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    padding: 20px 22px;
+    border-radius: 3px;
+    transition: all .15s;
+  }
+  .feat-card:hover{ border-color: var(--red-border); }
+  .feat-card .ft{ font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+  .feat-card .fpy{ color: var(--primary); font-style: italic; font-size: 13.5px; margin-bottom: 12px; }
+  .feat-card .fd{ font-size: 13px; color: var(--text-mute); line-height: 1.65; margin-bottom: 12px; }
+  .feat-card .flink{ color: var(--primary); font-size: 13.5px; font-weight:500; }
+  .view-all{
+    display:block;
+    text-align:center;
+    padding: 14px;
+    border: 1px dashed var(--border);
+    color: var(--text-mute);
+    margin-top: 14px;
+    border-radius: 2px;
+    font-size: 14px;
+    transition: all .15s;
+  }
+  .view-all:hover{ border-color: var(--red-border); color: var(--primary); background: var(--primary-lt); }
+
+  @media (max-width: 1024px){
+    .bian-layout{ grid-template-columns: 1fr; }
+    .side{ position: static; max-height: none; }
+    .feat-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px){
+    .bian-layout{ padding: 0 16px 60px; }
+    .bian-card{ padding: 22px 20px; gap: 16px; }
+    .bian-num{ width: 50px; height: 50px; font-size: 22px; }
+    .feat-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<nav class="nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+  <div class="nav-menu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html" class="active">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html" class="active">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
+
+<section class="hero hero-page">
+  <div class="landscape-bg" aria-hidden="true"></div>
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+  <div class="hero-inner">
+    <nav class="crumbs">
+      <a href="index.html">首頁</a> <span class="sep">›</span>
+      <span class="cur">按編類瀏覽</span>
+    </nav>
+    <h1 class="title-page">按編類<span class="red">瀏覽</span></h1>
+    <p class="sub-page">依《甲骨學大辭典》六大編分類瀏覽條目・傳統體例的學術組織</p>
+  </div>
+</section>
+
+<section class="bian-layout">
+
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="side-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h14v16H5z M9 4v16 M5 9h4 M5 14h4"/></svg>
+      編類目錄
+    </div>
+    <div class="side-list" id="sideList"></div>
+    <div class="side-foot">
+      共 <b id="sfBian">6</b> 編 ・ <b id="sfTotal">3,881</b> 條目
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div>
+    <div class="bian-card" id="bianCard">
+      <div class="bian-num" id="bianRoman">Ⅰ</div>
+      <div class="bian-info">
+        <h2 id="bianTitle">第一編 理論術語類 <span class="tag" id="bianTag">當前編</span></h2>
+        <p id="bianDesc">收錄甲骨學基礎理論與專業術語，涵蓋研究方法、學科沿革、概論等。</p>
+        <div class="count">本編收錄詞條 <b id="bianCount">—</b> 條，下分 <b id="bianZhangCount">—</b> 章。</div>
+      </div>
+    </div>
+
+    <div class="chapter-list">
+      <h3 class="section-h">章節列表</h3>
+      <table class="dt-table chap-table">
+        <thead>
+          <tr>
+            <th style="width:60%">章名</th>
+            <th style="width:20%">條目數</th>
+            <th style="width:20%; text-align:right;">操作</th>
+          </tr>
+        </thead>
+        <tbody id="chapBody"></tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="feat-head">
+        <h3 class="section-h" style="margin-bottom:0">本章條目精選</h3>
+        <span style="color: var(--text-mute); font-size: 13px;" id="featChapName">—</span>
+      </div>
+      <div class="feat-grid" id="featGrid"></div>
+      <a class="view-all" id="viewAllLink" href="#">查看本章全部條目 ∨</a>
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script src="site.js"></script>
+<script>
+  const ROMAN = ['Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ'];
+  const BIAN_DESC = {
+    '第一編 理論術語類': '收錄甲骨學基礎理論、學術範式與專業術語，是學科認識與研究方法的入口。',
+    '第二編 考古文物類': '收錄與甲骨相關的考古發現、文物器類、出土遺址與整理著錄等資料。',
+    '第三編 語言文字類': '收錄甲骨文字形、構形分析、文字學術語及語言學研究相關詞目。',
+    '第四編 歷史文獻類': '收錄與商代歷史、社會結構、典章制度及甲骨所載史事相關的詞條。',
+    '第五編 研究成果類': '收錄歷代甲骨學研究著作、學者貢獻、學派流變與學術成果的綜述。',
+    '第六編 活動影響類': '收錄甲骨學的傳播、教學、會議、機構與其在當代文化中的延伸影響。',
+  };
+
+  let _entries = [];
+  let _bianOrder = [];
+  let _byBian = {};
+  let _curBian = null;
+  let _curZhang = null;
+
+  loadEntries().then(d => {
+    _entries = d || [];
+    document.getElementById('sfTotal').textContent = _entries.length.toLocaleString();
+
+    // Group
+    _byBian = {};
+    _entries.forEach(e => {
+      const b = e.bian || '其他';
+      if (!_byBian[b]) _byBian[b] = { list: [], zhangs: {} };
+      _byBian[b].list.push(e);
+      const z = e.zhang || '未分章';
+      if (!_byBian[b].zhangs[z]) _byBian[b].zhangs[z] = [];
+      _byBian[b].zhangs[z].push(e);
+    });
+    // Order by first appearance of bian number
+    _bianOrder = Object.keys(_byBian).sort((a, b) => {
+      const ma = a.match(/第(.)編/); const mb = b.match(/第(.)編/);
+      const order = { '一':1, '二':2, '三':3, '四':4, '五':5, '六':6 };
+      return (order[ma?.[1]] || 99) - (order[mb?.[1]] || 99);
+    });
+    document.getElementById('sfBian').textContent = _bianOrder.length;
+    _curBian = _bianOrder[0];
+    _curZhang = Object.keys(_byBian[_curBian].zhangs)[0];
+    renderSidebar();
+    renderMain();
+  });
+
+  function renderSidebar(){
+    const list = document.getElementById('sideList');
+    list.innerHTML = _bianOrder.map((b, i) => {
+      const data = _byBian[b];
+      const isCur = b === _curBian;
+      const zhangs = Object.keys(data.zhangs);
+      return `<div class="side-item${isCur ? ' open' : ''}" data-bian="${esc(b)}">
+        <div class="side-bian${isCur ? ' active' : ''}" onclick="toggleBian('${esc(b)}')">
+          <span>${ROMAN[i] || (i+1)}. ${esc(b)}</span>
+          <span class="count">${data.list.length.toLocaleString()} <span class="caret"></span></span>
+        </div>
+        <div class="side-zhangs">
+          ${zhangs.map(z => `
+            <div class="side-zhang${(isCur && z === _curZhang) ? ' cur' : ''}" onclick="selectZhang('${esc(b)}','${esc(z)}')">
+              <span>${esc(z)}</span>
+              <span class="count">${data.zhangs[z].length}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleBian(b){
+    if (b === _curBian){
+      // toggle open state
+      const item = document.querySelector(`.side-item[data-bian="${cssEsc(b)}"]`);
+      item.classList.toggle('open');
+      return;
+    }
+    _curBian = b;
+    _curZhang = Object.keys(_byBian[b].zhangs)[0];
+    renderSidebar();
+    renderMain();
+  }
+
+  function selectZhang(b, z){
+    _curBian = b; _curZhang = z;
+    renderSidebar();
+    renderMain();
+  }
+
+  function cssEsc(s){ return String(s).replace(/"/g, '\\"'); }
+
+  function renderMain(){
+    const data = _byBian[_curBian];
+    const idx = _bianOrder.indexOf(_curBian);
+    document.getElementById('bianRoman').textContent = ROMAN[idx] || (idx+1);
+    document.getElementById('bianTitle').innerHTML = `${esc(_curBian)} <span class="tag">當前編</span>`;
+    document.getElementById('bianDesc').textContent = BIAN_DESC[_curBian] || '';
+    document.getElementById('bianCount').textContent = data.list.length.toLocaleString();
+    const zhangNames = Object.keys(data.zhangs);
+    document.getElementById('bianZhangCount').textContent = zhangNames.length;
+
+    // chapter table
+    const cbody = document.getElementById('chapBody');
+    cbody.innerHTML = zhangNames.map(z => {
+      const cnt = data.zhangs[z].length;
+      const isCur = z === _curZhang;
+      return `<tr class="chap-row" style="${isCur ? 'background: rgba(139,26,26,0.04);' : ''}">
+        <td><div class="name">${esc(z)}<span>${esc(data.zhangs[z][0]?.jie || '')}</span></div></td>
+        <td><span class="cnum">${cnt.toLocaleString()}</span> 條</td>
+        <td style="text-align:right;"><a class="btn-solid" href="javascript:void(0)" onclick="selectZhang('${esc(_curBian)}','${esc(z)}')">查看條目 ›</a></td>
+      </tr>`;
+    }).join('');
+
+    // featured (first 3 of cur zhang)
+    document.getElementById('featChapName').textContent = `當前章節：${_curZhang}`;
+    const items = (data.zhangs[_curZhang] || []).slice(0, 3);
+    document.getElementById('featGrid').innerHTML = items.map(e => `
+      <div class="feat-card">
+        <div class="ft">${esc(e.title)}</div>
+        <div class="fpy">${esc(e.pinyin || '')}</div>
+        <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
+        <a class="flink" href="#">查看詳情 ›</a>
+      </div>
+    `).join('');
+    const total = (data.zhangs[_curZhang] || []).length;
+    document.getElementById('viewAllLink').textContent = `查看本章全部 ${total} 條 ∨`;
+  }
+</script>
+</body>
+</html>

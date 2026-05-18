@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>甲骨學大辭典 · JIAGUXUE DACIDIAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ----- index-only styles ----- */
+  .hero{ min-height: 520px; }
+
+  /* ---------- Quick nav strip ---------- */
+  .quick-nav{
+    max-width: 1240px;
+    margin: 36px auto 0;
+    padding: 0 28px;
+  }
+  .quick-nav-inner{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .qn-item{
+    display:flex; align-items:center; gap: 16px;
+    padding: 22px 22px;
+    border-right: 1px solid var(--border-lt);
+    color: var(--text);
+    transition: background .15s;
+  }
+  .qn-item:last-child{ border-right:0; }
+  .qn-item:hover{ background: rgba(196,168,130,0.08); }
+  .qn-item:hover .arrow{ color: var(--primary); transform: translateX(2px); }
+  .qn-icon{
+    width: 44px; height: 44px;
+    border: 1.4px solid var(--accent);
+    color: var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 3px;
+    flex-shrink:0;
+    font-size: 14px;
+    font-weight:700;
+  }
+  .qn-icon svg{ width: 24px; height: 24px; }
+  .qn-text{ flex:1; min-width:0; }
+  .qn-title{ font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .qn-sub{ font-size: 12px; color: var(--text-mute); }
+  .arrow{
+    font-size: 22px;
+    color: var(--text-mute);
+    transition: transform .2s, color .15s;
+    line-height: 1;
+  }
+
+  /* ---------- Intro section ---------- */
+  .intro-wrap{
+    position:relative;
+    max-width: 1240px;
+    margin: 50px auto 0;
+    padding: 0 28px 80px;
+  }
+  .intro{
+    position:relative;
+    z-index:1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 4px;
+    padding: 40px 44px;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 56px;
+  }
+  .intro p{
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: var(--text-mid);
+    margin: 0 0 14px;
+    text-align: justify;
+  }
+  .more-btn{ margin-top: 22px; }
+  .stats{ display:flex; flex-direction:column; gap: 16px; }
+  .stat-card{
+    background: var(--bg);
+    border: 1px solid var(--border-lt);
+    padding: 24px 26px;
+    border-radius: 3px;
+    display:flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .stat-num{
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+    font-feature-settings: "tnum";
+  }
+  .stat-label{ font-size: 14px; color: var(--text-mute); line-height: 1.4; }
+  .stat-label b{
+    display:block;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  /* ---------- Search results ---------- */
+  .results-wrap{
+    max-width: 1240px;
+    margin: 50px auto 0;
+    padding: 0 28px 80px;
+    display:none;
+  }
+  .results-wrap.show{ display:block; }
+  .results-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom: 24px; gap: 20px; flex-wrap:wrap;
+  }
+  .results-meta{ color: var(--text-mute); font-size: 14px; }
+  .results-meta b{ color: var(--primary); font-weight:700; }
+  .result-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .result-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-lt);
+    border-radius: 3px;
+    padding: 22px 24px;
+    transition: all .2s;
+    cursor: pointer;
+  }
+  .result-card:hover{
+    border-color: var(--red-border);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px -10px rgba(139,26,26,0.25);
+  }
+  .rc-title{
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 6px;
+    line-height: 1.2;
+  }
+  .rc-pinyin{
+    font-style: italic;
+    color: var(--primary);
+    font-size: 14.5px;
+    margin-bottom: 12px;
+  }
+  .rc-path{
+    font-size: 13px;
+    color: var(--text-mute);
+    border-top: 1px dashed var(--border-lt);
+    padding-top: 10px;
+    line-height: 1.55;
+  }
+  .rc-path b{ color: var(--text-mid); font-weight:500; }
+  .no-results{
+    text-align:center;
+    padding: 60px 20px;
+    color: var(--text-mute);
+    font-size: 15px;
+    background: var(--bg-card);
+    border:1px dashed var(--border);
+    border-radius: 3px;
+  }
+
+  @media (max-width: 1024px){
+    .quick-nav-inner{ grid-template-columns: repeat(2, 1fr); }
+    .qn-item{ border-right:0; border-bottom: 1px solid var(--border-lt); }
+    .qn-item:nth-child(odd){ border-right: 1px solid var(--border-lt); }
+    .qn-item:nth-last-child(-n+2){ border-bottom: 0; }
+    .intro{ grid-template-columns: 1fr; gap: 28px; padding: 32px; }
+    .result-grid{ grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px){
+    .quick-nav{ margin-top: 28px; padding: 0 16px; }
+    .quick-nav-inner{ grid-template-columns: 1fr 1fr; }
+    .qn-item{ padding: 18px 16px; gap: 12px; }
+    .qn-icon{ width: 40px; height: 40px; }
+    .qn-title{ font-size: 16px; }
+    .qn-sub{ font-size: 11.5px; }
+    .intro-wrap{ padding: 0 16px 60px; margin-top: 36px; }
+    .intro{ padding: 26px 22px; }
+    .results-wrap{ padding: 0 16px 60px; }
+    .result-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-landscape" aria-hidden="true"></div>
+
+
+<!-- Top Navigation -->
+<nav class="nav" data-screen-label="01 Top Nav">
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
+    </div>
+  </div>
+
+  <div class="nav-menu">
+    <a href="index.html" class="active">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bushou.html">按部首</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html" class="active">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bushou.html">按部首</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
+
+<!-- Hero -->
+<section class="hero" data-screen-label="02 Hero">
+  <!-- Main rubbing fragment, left side, soft watermark -->
+  <div class="rubbing-wrap" aria-hidden="true">
+    <img src="images/rubbing.png" alt="" />
+  </div>
+
+  <!-- Bone, fully visible, right -->
+  <div class="bone-wrap" aria-hidden="true">
+    <img src="images/bone.png" alt="" />
+  </div>
+
+  <div class="hero-inner hero-center">
+    <div class="eyebrow">ORACLE BONE STUDIES LEXICON</div>
+    <h1 class="title-main">甲骨學<span class="red">大辭典</span></h1>
+    <div class="subtitle">匯集甲骨學術語精要・傳承與研究的知識之庫</div>
+
+    <form class="search-box" id="searchForm" onsubmit="return doSearch(event)">
+      <div class="search-select" id="selScope" tabindex="0" onclick="toggleScope(event)">
+        <span data-scope="title">詞條</span>
+        <ul class="scope-menu" id="scopeMenu">
+          <li data-scope="title" class="cur" onclick="pickScope(event,'title','詞條')">詞條</li>
+          <li data-scope="pinyin" onclick="pickScope(event,'pinyin','拼音')">拼音</li>
+          <li data-scope="bian" onclick="pickScope(event,'bian','編類')">編類</li>
+        </ul>
+      </div>
+      <input class="search-input" id="searchInput" type="text"
+             placeholder="輸入詞條、拼音或關鍵字" autocomplete="off" />
+      <button class="search-btn" type="submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        搜索
+      </button>
+    </form>
+
+    <div class="hot-tags">
+      <span class="label">熱門：</span>
+      <a href="#" onclick="quickSearch('甲骨');return false;">甲骨</a>
+      <a href="#" onclick="quickSearch('卜辭');return false;">卜辭</a>
+      <a href="#" onclick="quickSearch('殷商');return false;">殷商</a>
+      <a href="#" onclick="quickSearch('王卜');return false;">王卜</a>
+      <a href="#" onclick="quickSearch('貞人');return false;">貞人</a>
+      <a href="#" onclick="quickSearch('甲骨文');return false;">甲骨文</a>
+      <a href="#" onclick="quickSearch('殷墟');return false;">殷墟</a>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Nav -->
+<section class="quick-nav" data-screen-label="03 Quick Nav">
+  <div class="quick-nav-inner">
+    <a class="qn-item" href="pinyin.html">
+      <div class="qn-icon">A·Z</div>
+      <div class="qn-text">
+        <div class="qn-title">按音序瀏覽</div>
+        <div class="qn-sub">A-Z 音序檢索</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="qn-item" href="bushou.html">
+      <div class="qn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h14v16H5z M9 4v16 M5 9h4 M5 14h4"/></svg>
+      </div>
+      <div class="qn-text">
+        <div class="qn-title">按部首瀏覽</div>
+        <div class="qn-sub">按部首分類檢索</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="qn-item" href="bian.html">
+      <div class="qn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h3v16H5z M10.5 4h3v16h-3z M16 4h3v16h-3z"/></svg>
+      </div>
+      <div class="qn-text">
+        <div class="qn-title">按編類瀏覽</div>
+        <div class="qn-sub">六編體例檢索瀏覽</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="qn-item" href="appendix.html">
+      <div class="qn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11l3 3v13H5z M8 9h8 M8 13h8 M8 17h5"/></svg>
+      </div>
+      <div class="qn-text">
+        <div class="qn-title">附 録</div>
+        <div class="qn-sub">表格與索引資料</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+    <a class="qn-item" href="about.html">
+      <div class="qn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 20h18 M5 20V10l7-4 7 4v10 M8 20v-6h8v6"/></svg>
+      </div>
+      <div class="qn-text">
+        <div class="qn-title">關於本辭典</div>
+        <div class="qn-sub">辭典簡介與説明</div>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+  </div>
+</section>
+
+<!-- Intro section -->
+<section class="intro-wrap" id="introSection" data-screen-label="04 Intro">
+  <!-- Big landscape band at bottom of intro section -->
+  <div class="intro">
+    <div>
+      <h2 class="section-h">辭典簡介</h2>
+      <p>《甲骨學大辭典》是一部系統收錄甲骨學相關術語、器物、文物、語言文字、歷史文獻、研究成果及學術流派的綜合性工具書。其内容涵蓋甲骨學研究的主要領域，收錄條目逾數萬條，力求準確、簡明、實用，並注重學術性與可檢索性相結合，服務於學術研究與教學。</p>
+      <p>本辭典以六編體例（理論術語編、考古文物編、語言文字編、歷史文獻編、研究成果編、活動影響編）為框架，兼顧傳統分類與現代檢索需求，是甲骨學研究與相關學科不可或缺的參考工具。</p>
+      <a class="btn-ghost more-btn" href="about.html">了解更多 <span style="font-size:18px;line-height:1;">→</span></a>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num">3,881</div>
+        <div class="stat-label"><b>詞條總數</b>系統收錄甲骨學專業辭條</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">6</div>
+        <div class="stat-label"><b>編類分卷</b>傳統體例分類框架</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">26</div>
+        <div class="stat-label"><b>音序索引</b>A–Z 拼音完整檢索</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search results (hidden, shown on search) -->
+<section class="results-wrap" id="resultsSection" data-screen-label="05 Search Results">
+  <div class="results-head">
+    <h2 class="section-h" style="margin-bottom:0">搜索結果</h2>
+    <div class="results-meta">關鍵字「<b id="kwDisplay"></b>」　共 <b id="kwCount">0</b> 條</div>
+  </div>
+  <div id="resultGrid" class="result-grid"></div>
+  <div class="pager" id="resultPager" style="margin-top:32px"></div>
+</section>
+
+<footer>
+  鄭州大學漢字文明研究中心 <span class="sep">·</span> 《甲骨學大辭典》數字版 <span class="sep">·</span> Phase 1 (Demo)
+</footer>
+
+<script src="site.js"></script>
+<script>
+  let _allEntries = [];
+  let _curResults = [];
+  let _curPage = 1;
+  const PAGE_SIZE = 12;
+
+  loadEntries().then(d => { _allEntries = d || []; });
+
+  function quickSearch(kw){
+    document.getElementById('searchInput').value = kw;
+    runSearch(kw);
+  }
+  function doSearch(e){
+    e.preventDefault();
+    const kw = document.getElementById('searchInput').value.trim();
+    runSearch(kw);
+    return false;
+  }
+  function runSearch(kw){
+    const intro = document.getElementById('introSection');
+    const res   = document.getElementById('resultsSection');
+    if(!kw){
+      res.classList.remove('show');
+      intro.style.display = '';
+      return;
+    }
+    _curResults = searchEntries(_allEntries, kw);
+    _curPage = 1;
+    document.getElementById('kwDisplay').textContent = kw;
+    document.getElementById('kwCount').textContent = _curResults.length.toLocaleString();
+    renderResultsPage();
+    intro.style.display = 'none';
+    res.classList.add('show');
+    res.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function renderResultsPage(){
+    const grid = document.getElementById('resultGrid');
+    const pager = document.getElementById('resultPager');
+    if (_curResults.length === 0){
+      grid.innerHTML = '<div class="no-results" style="grid-column:1/-1">未找到相關辭條，請嘗試其他關鍵字。</div>';
+      pager.innerHTML = '';
+      return;
+    }
+    const start = (_curPage - 1) * PAGE_SIZE;
+    const page = _curResults.slice(start, start + PAGE_SIZE);
+    grid.innerHTML = page.map(e => `
+      <article class="result-card">
+        <h3 class="rc-title">${esc(e.title)}</h3>
+        <div class="rc-pinyin">${esc(e.pinyin || '')}</div>
+        <div class="rc-path"><b>所屬</b>　${esc(e.bian || '')}　${e.zhang ? '／ ' + esc(e.zhang) : ''}</div>
+      </article>
+    `).join('');
+    renderPager(pager, _curResults.length, PAGE_SIZE, _curPage, p => {
+      _curPage = p;
+      renderResultsPage();
+      document.getElementById('resultsSection').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  // Scope dropdown
+  function toggleScope(e){
+    e.stopPropagation();
+    document.getElementById('scopeMenu').classList.toggle('open');
+  }
+  function pickScope(e, key, label){
+    e.stopPropagation();
+    const span = document.querySelector('#selScope > span');
+    span.dataset.scope = key;
+    span.textContent = label;
+    document.querySelectorAll('#scopeMenu li').forEach(li => {
+      li.classList.toggle('cur', li.dataset.scope === key);
+    });
+    document.getElementById('scopeMenu').classList.remove('open');
+  }
+  document.addEventListener('click', () => {
+    document.getElementById('scopeMenu').classList.remove('open');
+  });
+</script>
+</body>
+</html>
