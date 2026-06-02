@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>辭條 · 甲骨學大辭典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .entry-wrap{ max-width: 820px; margin: 0 auto; padding: 0 28px 90px; }
+  .crumb{ font-size: 13.5px; color: var(--text-mute); padding: 26px 0 18px; }
+  .crumb a{ color: var(--text-mute); }
+  .crumb a:hover{ color: var(--primary); }
+  .crumb .sep{ margin: 0 7px; color: var(--border); }
+
+  .entry-head{
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: 18px; margin-bottom: 30px;
+    position: relative;
+  }
+  .entry-head h1{
+    font-size: 38px; font-weight: 900; color: var(--text);
+    margin: 0 0 8px; letter-spacing: 1px;
+  }
+  .entry-head .py{ color: var(--primary); font-style: italic; font-size: 16px; }
+  .entry-head .tags{
+    margin-top: 14px; display:flex; flex-wrap:wrap; gap: 8px;
+  }
+  .entry-head .tag{
+    font-size: 12.5px; color: var(--text-mid);
+    background: var(--bg-warm); border: 1px solid var(--border-lt);
+    padding: 4px 11px; border-radius: 3px;
+  }
+  .entry-head .seal{
+    position:absolute; top: 4px; right: 0;
+    width: 52px; height: 52px;
+    border: 2px solid var(--primary); color: var(--primary);
+    border-radius: 4px; display:flex; align-items:center; justify-content:center;
+    font-size: 22px; font-weight: 700; opacity: .85;
+    transform: rotate(-4deg);
+  }
+
+  /* 正文 */
+  .content{ font-size: 16px; line-height: 2.0; color: var(--text-mid); }
+  .content p{ margin: 0 0 16px; text-align: justify; }
+  .content h3.sec{
+    font-size: 17.5px; color: var(--text); font-weight: 700;
+    margin: 30px 0 14px; padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+  /* 行内字形图：与文字同高，随文排 */
+  .content img.glyph{
+    height: 1.25em; width: auto; vertical-align: -0.18em;
+    margin: 0 2px; background: #fff;
+    border: 1px solid var(--border-lt); border-radius: 2px; padding: 1px;
+  }
+  /* 拓本/图版块 */
+  .content .figs{
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px; margin: 26px 0; padding: 22px;
+    background: var(--bg-card); border: 1px solid var(--border-lt); border-radius: 4px;
+  }
+  .content .figs figure{ margin: 0; text-align: center; }
+  .content .figs img{
+    max-width: 100%; height: auto; border: 1px solid var(--border);
+    background: #fff; border-radius: 2px;
+  }
+  .content figcaption{
+    font-size: 12.5px; color: var(--text-mute); margin-top: 8px; line-height: 1.5;
+  }
+  .content .byline{
+    text-align: right; color: var(--text-mute); font-style: italic;
+    font-size: 14px; margin: 24px 0 0;
+  }
+  .content .refs{
+    margin-top: 34px; padding: 18px 22px;
+    background: var(--primary-lt); border-left: 4px solid var(--primary); border-radius: 3px;
+  }
+  .content .refs h4{ margin: 0 0 10px; color: var(--primary-dk); font-size: 15px; }
+  .content .refs ul{ margin: 0; padding-left: 18px; }
+  .content .refs li{ font-size: 13.5px; color: var(--text-mid); line-height: 1.7; margin-bottom: 5px; }
+
+  /* 截图兜底 */
+  .content .shot{ text-align:center; }
+  .content .shot img{ max-width: 100%; border: 1px solid var(--border); border-radius: 4px; }
+  .content .shot .note{ font-size: 12.5px; color: var(--text-mute); margin-top: 10px; }
+
+  /* 状态 */
+  .state{ padding: 70px 20px; text-align:center; color: var(--text-mute); font-size: 15px; }
+
+  .backbar{ margin-top: 40px; }
+  .backbar a{
+    display:inline-block; padding: 10px 20px; font-size: 14px;
+    border: 1px solid var(--border); border-radius: 3px; color: var(--text-mid);
+  }
+  .backbar a:hover{ border-color: var(--primary); color: var(--primary); }
+
+  @media (max-width: 640px){
+    .entry-head h1{ font-size: 30px; }
+    .entry-head .seal{ width: 42px; height: 42px; font-size: 18px; }
+    .content{ font-size: 15.5px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">甲骨學大辭典</a>
+    <div class="nav-links">
+      <a href="index.html">首頁</a>
+      <a href="pinyin.html">按音序</a>
+      <a href="bian.html">按編類</a>
+      <a href="appendix.html">附錄</a>
+      <a href="about.html">關於本辭典</a>
+    </div>
+    <button class="nav-toggle" onclick="toggleMobileMenu()" aria-label="選單">☰</button>
+  </div>
+  <div class="mobile-menu" id="mmenu">
+    <a href="index.html">首頁</a>
+    <a href="pinyin.html">按音序</a>
+    <a href="bian.html">按編類</a>
+    <a href="appendix.html">附錄</a>
+    <a href="about.html">關於本辭典</a>
+  </div>
+</nav>
+
+<div class="entry-wrap">
+  <div class="crumb" id="crumb">
+    <a href="index.html">首頁</a> <span class="sep">›</span>
+    <a href="bian.html">按編類</a>
+  </div>
+
+  <div id="main">
+    <div class="state">載入中…</div>
+  </div>
+</div>
+
+<script src="site.js"></script>
+<script>
+  function qid(){
+    const u = new URLSearchParams(location.search);
+    const id = parseInt(u.get('id'), 10);
+    return Number.isFinite(id) ? id : null;
+  }
+
+  function renderHead(e){
+    const tags = [e.bian, e.zhang, e.jie, (e.xiao && e.xiao !== e.title ? e.xiao : null)]
+      .filter(Boolean).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+    const seal = (e.title || '').slice(-1);
+    return `<div class="entry-head">
+      <div class="seal">${esc(seal)}</div>
+      <h1>${esc(e.title)}</h1>
+      <span class="py">［${esc(e.pinyin || '')}］</span>
+      <div class="tags">${tags}</div>
+    </div>`;
+  }
+
+  function renderCrumb(e){
+    document.getElementById('crumb').innerHTML =
+      `<a href="index.html">首頁</a> <span class="sep">›</span>
+       <a href="bian.html">按編類</a> <span class="sep">›</span>
+       <span>${esc(e.bian || '')}</span> <span class="sep">›</span>
+       <span style="color:var(--primary)">${esc(e.title)}</span>`;
+  }
+
+  let _hasText = null;
+  async function loadHasText(){
+    if (!_hasText){
+      try{ _hasText = new Set(await (await fetch('data/has_text.json',{cache:'no-cache'})).json()); }
+      catch(_){ _hasText = new Set(); }
+    }
+    return _hasText;
+  }
+  async function loadContent(id){
+    // 先查清单：无正文则直接交给截图/缺省兜底，不发无谓请求
+    const set = await loadHasText();
+    if (!set.has(id)) return null;
+    try{
+      const r = await fetch(`data/content/${id}.html`, {cache: 'no-cache'});
+      if (r.ok){
+        const html = await r.text();
+        if (html && html.trim()) return {type:'html', html};
+      }
+    }catch(_){}
+    return null;
+  }
+
+  (async () => {
+    const main = document.getElementById('main');
+    const id = qid();
+    if (!id){ main.innerHTML = `<div class="state">未指定辭條。</div>`; return; }
+
+    const entries = await loadEntries();
+    const e = (entries || []).find(x => x.id === id);
+    if (!e){ main.innerHTML = `<div class="state">未找到該辭條（id=${id}）。</div>`; return; }
+
+    document.title = `${e.title} · 甲骨學大辭典`;
+    renderCrumb(e);
+
+    const back = `<div class="backbar"><a href="bian.html">‹ 返回目錄</a></div>`;
+    const content = await loadContent(id);
+
+    let body;
+    if (content && content.type === 'html'){
+      body = `<div class="content">${content.html}</div>`;          // 文字版
+    } else if (e.imageUrl){
+      body = `<div class="content"><div class="shot">
+                <img src="${esc(e.imageUrl)}" alt="${esc(e.title)} 內容">
+                <div class="note">（本條爲字形密集條目，暫以辭典原圖呈現）</div>
+              </div></div>`;                                         // 截图兜底
+    } else {
+      body = `<div class="state">此條內容整理中。</div>`;             // 缺省
+    }
+    main.innerHTML = renderHead(e) + body + back;
+  })();
+</script>
+</body>
+</html>

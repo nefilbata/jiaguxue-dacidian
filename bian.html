@@ -228,7 +228,6 @@
   <div class="nav-menu">
     <a href="index.html">首頁</a>
     <a href="pinyin.html">按音序</a>
-    <a href="bushou.html">按部首</a>
     <a href="bian.html" class="active">按編類</a>
     <a href="appendix.html">附錄</a>
     <a href="about.html">關於本辭典</a>
@@ -247,7 +246,6 @@
 <div class="m-menu" id="mmenu">
   <a href="index.html">首頁</a>
   <a href="pinyin.html">按音序</a>
-  <a href="bushou.html">按部首</a>
   <a href="bian.html" class="active">按編類</a>
   <a href="appendix.html">附錄</a>
   <a href="about.html">關於本辭典</a>
@@ -453,10 +451,10 @@
     const items = (data.zhangs[_curZhang] || []).slice(0, 3);
     document.getElementById('featGrid').innerHTML = items.map(e => `
       <div class="feat-card">
-        <div class="ft">${esc(e.title)}</div>
+        <div class="ft"><a href="entry.html?id=${e.id}" style="color:inherit">${esc(e.title)}</a></div>
         <div class="fpy">${esc(e.pinyin || '')}</div>
         <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
-        <a class="flink" href="#">查看詳情 ›</a>
+        <a class="flink" href="entry.html?id=${e.id}">查看詳情 ›</a>
       </div>
     `).join('');
     const total = (data.zhangs[_curZhang] || []).length;
