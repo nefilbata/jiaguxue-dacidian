@@ -222,7 +222,7 @@
       ? '<span style="color:var(--primary);font-size:10px;margin-right:6px">\u25cf</span>'
       : '<span style="color:var(--border);font-size:10px;margin-right:6px">\u25cb</span>';
     return `<tr>
-        <td><div class="e-title">${dot}<a class="han" href="entry.html?id=${e.id}">${esc(e.title)}</a><span class="py">［${esc(e.pinyin || '')}］</span></div></td>
+        <td><div class="e-title">${dot}<a class="han" href="${entryHref(e.id, {from:'pinyin', L:_curLetter})}">${esc(e.title)}</a><span class="py">［${esc(e.pinyin || '')}］</span></div></td>
         <td class="e-desc">${esc(e.zhang || '')}${jie}${xiao}</td>
         <td class="e-bian"><b>${esc(e.bian || '')}</b><span class="num">／ ${idStr}</span></td>
       </tr>`;

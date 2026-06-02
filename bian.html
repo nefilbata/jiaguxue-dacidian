@@ -158,6 +158,36 @@
   .chap-row .name{ font-weight: 700; font-size: 16px; color: var(--text); }
   .chap-row .name span{ display:block; color: var(--text-mute); font-size: 12.5px; font-weight: 400; margin-top: 3px; }
   .chap-row .cnum{ color: var(--primary); font-weight: 700; font-feature-settings: "tnum"; }
+  .chap-row .btn-solid .lbl-open{ display:none; }
+  .chap-row.open .btn-solid .lbl-shut{ display:none; }
+  .chap-row.open .btn-solid .lbl-open{ display:inline; }
+  .chap-row.open{ background: rgba(139,26,26,0.04); }
+  .chap-row.open .name,
+  .chap-row.open .cnum{ color: var(--primary); }
+
+  /* Accordion detail row */
+  .chap-detail-row > td{ padding: 0 !important; border-top: 0 !important; }
+  .chap-detail{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .32s ease;
+    background: rgba(212,196,168,0.05);
+  }
+  .chap-detail.open{ grid-template-rows: 1fr; }
+  .chap-detail > .cd-inner{
+    min-height: 0;
+    overflow: hidden;
+  }
+  .chap-detail.open > .cd-inner{
+    overflow-y: auto;
+    max-height: 540px;
+    padding: 20px 22px 24px;
+    border-bottom: 1px solid var(--border-lt);
+  }
+  .cd-note{
+    color: var(--text-mute); font-size: 12.5px;
+    margin: 0 0 14px;
+  }
 
   /* Featured */
   .feat-head{
@@ -304,15 +334,6 @@
         <tbody id="chapBody"></tbody>
       </table>
     </div>
-
-    <div>
-      <div class="feat-head">
-        <h3 class="section-h" style="margin-bottom:0">本章全部條目</h3>
-        <span style="color: var(--text-mute); font-size: 13px;" id="featChapName">—</span>
-      </div>
-      <div class="feat-grid" id="featGrid"></div>
-      <a class="view-all" id="viewAllLink" href="javascript:void(0)"></a>
-    </div>
   </div>
 
 </section>
@@ -351,7 +372,9 @@
   let _bianOrder = [];
   let _byBian = {};
   let _curBian = null;
-  let _curZhang = null;
+  let _openZhang = null;   // currently expanded chapter (accordion)
+  let _initScrollZ = null; // chapter to scroll to once rendered (from URL)
+  let _htB = new Set();
 
   loadEntries().then(d => {
     _entries = d || [];
@@ -374,15 +397,25 @@
       return (order[ma?.[1]] || 99) - (order[mb?.[1]] || 99);
     });
     document.getElementById('sfBian').textContent = _bianOrder.length;
-    _curBian = _bianOrder[0];
-    _curZhang = Object.keys(_byBian[_curBian].zhangs)[0];
+
+    // Restore origin from URL (?b=&z=), else default to first bian/first chapter
+    const params = new URLSearchParams(location.search);
+    const wantB = params.get('b');
+    const wantZ = params.get('z');
+    _curBian = (wantB && _byBian[wantB]) ? wantB : _bianOrder[0];
+    const zhangNames = Object.keys(_byBian[_curBian].zhangs);
+    if (wantZ && zhangNames.includes(wantZ)){
+      _openZhang = wantZ;
+      _initScrollZ = wantZ;   // scroll to it after first render
+    } else {
+      _openZhang = zhangNames[0];
+    }
     renderSidebar();
     renderMain();
   });
 
-  loadHasText().then(s => { _htB = s; renderMain(); });
+  loadHasText().then(s => { _htB = s; if (_curBian) renderMain(); });
 
-  let _htB = new Set();
   function renderSidebar(){
     const list = document.getElementById('sideList');
     list.innerHTML = _bianOrder.map((b, i) => {
@@ -395,8 +428,8 @@
           <span class="count">${data.list.length.toLocaleString()} <span class="caret"></span></span>
         </div>
         <div class="side-zhangs">
-          ${zhangs.map(z => `
-            <div class="side-zhang${(isCur && z === _curZhang) ? ' cur' : ''}" onclick="selectZhang('${esc(b)}','${esc(z)}')">
+          ${zhangs.map((z, zi) => `
+            <div class="side-zhang${(isCur && z === _openZhang) ? ' cur' : ''}" onclick="selectZhang('${esc(b)}', ${zi})">
               <span>${esc(z)}</span>
               <span class="count">${data.zhangs[z].length}</span>
             </div>
@@ -408,26 +441,64 @@
 
   function toggleBian(b){
     if (b === _curBian){
-      // toggle open state
+      // just toggle the sidebar group's open/close
       const item = document.querySelector(`.side-item[data-bian="${cssEsc(b)}"]`);
-      item.classList.toggle('open');
+      if (item) item.classList.toggle('open');
       return;
     }
     _curBian = b;
-    _curZhang = Object.keys(_byBian[b].zhangs)[0];
+    _openZhang = Object.keys(_byBian[b].zhangs)[0]; // expand first chapter, no scroll
     renderSidebar();
     renderMain();
   }
 
-  function selectZhang(b, z){
-    _curBian = b; _curZhang = z;
+  // From sidebar chapter click: switch + expand + scroll
+  function selectZhang(b, zi){
+    _curBian = b;
+    _openZhang = Object.keys(_byBian[b].zhangs)[zi];
     renderSidebar();
     renderMain();
+    scrollToZhang(zi);
+  }
+
+  // From "查看條目" button: accordion toggle
+  function toggleZhang(zi){
+    const names = Object.keys(_byBian[_curBian].zhangs);
+    const z = names[zi];
+    const willOpen = (z !== _openZhang);
+    _openZhang = willOpen ? z : null;
+    renderSidebar();
+    renderMain();
+    if (willOpen) scrollToZhang(zi);
+  }
+
+  function scrollToZhang(zi){
+    requestAnimationFrame(() => {
+      const row = document.getElementById('chaprow-' + zi);
+      if (!row) return;
+      const y = row.getBoundingClientRect().top + window.pageYOffset - 88;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
   }
 
   function cssEsc(s){ return String(s).replace(/"/g, '\\"'); }
 
+  function entryCard(e, z){
+    const dot = _htB.has(e.id)
+      ? '<span style="color:var(--primary);font-size:10px;margin-right:6px">\u25cf</span>'
+      : '<span style="color:var(--border);font-size:10px;margin-right:6px">\u25cb</span>';
+    const href = entryHref(e.id, { from:'bian', b:_curBian, z });
+    return `
+      <div class="feat-card">
+        <div class="ft">${dot}<a href="${href}" style="color:inherit">${esc(e.title)}</a></div>
+        <div class="fpy">${esc(e.pinyin || '')}</div>
+        <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
+        <a class="flink" href="${href}">查看詳情 ›</a>
+      </div>`;
+  }
+
   function renderMain(){
+    if (!_curBian) return;
     const data = _byBian[_curBian];
     const idx = _bianOrder.indexOf(_curBian);
     document.getElementById('bianRoman').textContent = ROMAN[idx] || (idx+1);
@@ -437,35 +508,35 @@
     const zhangNames = Object.keys(data.zhangs);
     document.getElementById('bianZhangCount').textContent = zhangNames.length;
 
-    // chapter table
+    // chapter table with inline accordion detail rows
     const cbody = document.getElementById('chapBody');
-    cbody.innerHTML = zhangNames.map(z => {
+    cbody.innerHTML = zhangNames.map((z, zi) => {
       const cnt = data.zhangs[z].length;
-      const isCur = z === _curZhang;
-      return `<tr class="chap-row" style="${isCur ? 'background: rgba(139,26,26,0.04);' : ''}">
-        <td><div class="name">${esc(z)}<span>${esc(data.zhangs[z][0]?.jie || '')}</span></div></td>
-        <td><span class="cnum">${cnt.toLocaleString()}</span> 條</td>
-        <td style="text-align:right;"><a class="btn-solid" href="javascript:void(0)" onclick="selectZhang('${esc(_curBian)}','${esc(z)}')">查看條目 ›</a></td>
-      </tr>`;
+      const isOpen = z === _openZhang;
+      const cards = isOpen
+        ? `<div class="cd-note">本章共 ${cnt.toLocaleString()} 條　（\u25cf 已錄正文 / \u25cb 整理中）</div>
+           <div class="feat-grid">${data.zhangs[z].map(e => entryCard(e, z)).join('')}</div>`
+        : '';
+      return `<tr class="chap-row${isOpen ? ' open' : ''}" id="chaprow-${zi}">
+          <td><div class="name">${esc(z)}<span>${esc(data.zhangs[z][0]?.jie || '')}</span></div></td>
+          <td><span class="cnum">${cnt.toLocaleString()}</span> 條</td>
+          <td style="text-align:right;"><a class="btn-solid" href="javascript:void(0)" onclick="toggleZhang(${zi})"><span class="lbl-shut">查看條目 ›</span><span class="lbl-open">收起 ▴</span></a></td>
+        </tr>
+        <tr class="chap-detail-row">
+          <td colspan="3">
+            <div class="chap-detail${isOpen ? ' open' : ''}">
+              <div class="cd-inner">${cards}</div>
+            </div>
+          </td>
+        </tr>`;
     }).join('');
 
-    // featured (first 3 of cur zhang)
-    document.getElementById('featChapName').textContent = `當前章節：${_curZhang}`;
-    const items = (data.zhangs[_curZhang] || []);
-    document.getElementById('featGrid').innerHTML = items.map(e => {
-      const dot = _htB.has(e.id)
-        ? '<span style="color:var(--primary);font-size:10px;margin-right:6px">\u25cf</span>'
-        : '<span style="color:var(--border);font-size:10px;margin-right:6px">\u25cb</span>';
-      return `
-      <div class="feat-card">
-        <div class="ft">${dot}<a href="entry.html?id=${e.id}" style="color:inherit">${esc(e.title)}</a></div>
-        <div class="fpy">${esc(e.pinyin || '')}</div>
-        <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
-        <a class="flink" href="entry.html?id=${e.id}">查看詳情 ›</a>
-      </div>`;
-    }).join('');
-    const total = items.length;
-    document.getElementById('viewAllLink').textContent = `本章共 ${total} 條　（\u25cf 已錄正文 / \u25cb 整理中）`;
+    // one-time scroll after restoring from URL
+    if (_initScrollZ){
+      const zi = zhangNames.indexOf(_initScrollZ);
+      _initScrollZ = null;
+      if (zi >= 0) scrollToZhang(zi);
+    }
   }
 </script>
 </body>

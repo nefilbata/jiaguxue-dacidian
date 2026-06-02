@@ -437,11 +437,19 @@
 
   let _allEntries = [];
   let _curResults = [];
+  let _curKw = '';
   let _curPage = 1;
   const PAGE_SIZE = 12;
 
   let _ht = new Set();
-  loadEntries().then(d => { _allEntries = d || []; });
+  loadEntries().then(d => {
+    _allEntries = d || [];
+    const q = new URLSearchParams(location.search).get('q');
+    if (q){
+      document.getElementById('searchInput').value = q;
+      runSearch(q);
+    }
+  });
   loadHasText().then(s => { _ht = s; });
 
   function quickSearch(kw){
@@ -455,6 +463,7 @@
     return false;
   }
   function runSearch(kw){
+    _curKw = kw;
     const intro = document.getElementById('introSection');
     const res   = document.getElementById('resultsSection');
     if(!kw){
@@ -482,7 +491,7 @@
     const start = (_curPage - 1) * PAGE_SIZE;
     const page = _curResults.slice(start, start + PAGE_SIZE);
     grid.innerHTML = page.map(e => `
-      <article class="result-card" style="cursor:pointer" onclick="location.href='entry.html?id=${e.id}'">
+      <article class="result-card" style="cursor:pointer" onclick="location.href='${entryHref(e.id, {from:'search', q:_curKw})}'">
         <h3 class="rc-title">${esc(e.title)} <span style="font-size:11px;font-weight:500;color:${_ht.has(e.id)?'var(--primary)':'var(--border)'}">${_ht.has(e.id)?'● 有正文':'○ 整理中'}</span></h3>
         <div class="rc-pinyin">${esc(e.pinyin || '')}</div>
         <div class="rc-path"><b>所屬</b>　${esc(e.bian || '')}　${e.zhang ? '／ ' + esc(e.zhang) : ''}</div>

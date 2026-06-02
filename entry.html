@@ -183,11 +183,14 @@
     </div>`;
   }
 
-  function renderCrumb(e){
+  function renderCrumb(e, back, from){
+    let mid = `<a href="${back.crumbHref}">${esc(back.crumbText)}</a>`;
+    if (from === 'bian' && e.bian){
+      mid += ` <span class="sep">›</span> <a href="${back.crumbHref}">${esc(e.bian)}</a>`;
+    }
     document.getElementById('crumb').innerHTML =
       `<a href="index.html">首頁</a> <span class="sep">›</span>
-       <a href="bian.html">按編類</a> <span class="sep">›</span>
-       <a href="bian.html">${esc(e.bian || '')}</a> <span class="sep">›</span>
+       ${mid} <span class="sep">›</span>
        <span style="color:var(--primary)">${esc(e.title)}</span>`;
   }
 
@@ -210,20 +213,30 @@
     const id = qid();
     if (!id){ main.innerHTML = `<div class="state">未指定辭條。</div>`; return; }
 
+    const params = new URLSearchParams(location.search);
+    const from = params.get('from');
+    const back = resolveBack(params);
+    function originFor(en){
+      if (from === 'search') return { from:'search', q: params.get('q') || '' };
+      if (from === 'pinyin') return { from:'pinyin', L: (en.pinyinInitial || params.get('L') || '').toUpperCase() };
+      if (from === 'bian')   return { from:'bian', b: en.bian || params.get('b') || '', z: en.zhang || params.get('z') || '' };
+      return {};
+    }
+
     const entries = await loadEntries();
     const e = (entries || []).find(x => x.id === id);
     if (!e){ main.innerHTML = `<div class="state">未找到該辭條（id=${id}）。</div>`; return; }
 
     document.title = `${e.title} · 甲骨學大辭典`;
-    renderCrumb(e);
+    renderCrumb(e, back, from);
 
     const prev = (entries || []).find(x => x.id === id - 1);
     const next = (entries || []).find(x => x.id === id + 1);
     const pn = `<nav class="entry-nav">
-      ${prev ? `<a class="pn prev" href="entry.html?id=${prev.id}"><span class="lbl">‹ 上一條</span><span class="tt">${esc(prev.title)}</span></a>` : '<span class="pn empty"></span>'}
-      ${next ? `<a class="pn next" href="entry.html?id=${next.id}"><span class="lbl">下一條 ›</span><span class="tt">${esc(next.title)}</span></a>` : '<span class="pn empty"></span>'}
+      ${prev ? `<a class="pn prev" href="${entryHref(prev.id, originFor(prev))}"><span class="lbl">‹ 上一條</span><span class="tt">${esc(prev.title)}</span></a>` : '<span class="pn empty"></span>'}
+      ${next ? `<a class="pn next" href="${entryHref(next.id, originFor(next))}"><span class="lbl">下一條 ›</span><span class="tt">${esc(next.title)}</span></a>` : '<span class="pn empty"></span>'}
     </nav>`;
-    const back = `<div class="backbar"><a href="bian.html">‹ 返回目錄</a></div>`;
+    const backbar = `<div class="backbar"><a href="${back.href}">${back.label}</a></div>`;
     const content = await loadContent(id);
 
     let body;
@@ -237,7 +250,7 @@
     } else {
       body = `<div class="state">此條內容整理中。</div>`;             // 缺省
     }
-    main.innerHTML = renderHead(e) + body + pn + back;
+    main.innerHTML = renderHead(e) + body + pn + backbar;
   })();
 </script>
 </body>

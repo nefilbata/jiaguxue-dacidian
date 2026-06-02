@@ -70,6 +70,46 @@ function renderPager(container, total, pageSize, current, onPage){
 // --- HTML escape ---
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+// --- Build an entry-detail link that remembers where it came from ---
+// origin: {from:'search'|'pinyin'|'bian', q?, L?, b?, z?}
+function entryHref(id, origin){
+  const p = new URLSearchParams();
+  p.set('id', id);
+  if (origin && origin.from){
+    p.set('from', origin.from);
+    if (origin.q) p.set('q', origin.q);
+    if (origin.L) p.set('L', origin.L);
+    if (origin.b) p.set('b', origin.b);
+    if (origin.z) p.set('z', origin.z);
+  }
+  return 'entry.html?' + p.toString();
+}
+
+// --- Resolve the "back" target + label from an entry's URL params ---
+function resolveBack(params){
+  const from = params.get('from');
+  if (from === 'search'){
+    const q = params.get('q') || '';
+    return { href: 'index.html' + (q ? '?q=' + encodeURIComponent(q) : ''),
+             label: '‹ 返回搜索結果', crumbHref: 'index.html' + (q ? '?q=' + encodeURIComponent(q) : ''), crumbText: '搜索結果' };
+  }
+  if (from === 'pinyin'){
+    const L = (params.get('L') || '').toUpperCase();
+    return { href: 'pinyin.html' + (L ? '#' + L : ''),
+             label: '‹ 返回音序瀏覽', crumbHref: 'pinyin.html' + (L ? '#' + L : ''), crumbText: '按音序' };
+  }
+  if (from === 'bian'){
+    const b = params.get('b') || '', z = params.get('z') || '';
+    const qs = [];
+    if (b) qs.push('b=' + encodeURIComponent(b));
+    if (z) qs.push('z=' + encodeURIComponent(z));
+    const href = 'bian.html' + (qs.length ? '?' + qs.join('&') : '');
+    return { href, label: '‹ 返回目錄', crumbHref: href, crumbText: '按編類' };
+  }
+  // default / legacy links with no origin
+  return { href: 'bian.html', label: '‹ 返回目錄', crumbHref: 'bian.html', crumbText: '按編類' };
+}
+
 // --- Has-text manifest ---
 let _hasTextSet=null;
 function loadHasText(){ if(!_hasTextSet){_hasTextSet=fetch('data/has_text.json',{cache:'no-cache'}).then(r=>r.json()).then(a=>new Set(a)).catch(()=>new Set());} return _hasTextSet; }
