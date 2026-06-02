@@ -69,3 +69,7 @@ function renderPager(container, total, pageSize, current, onPage){
 
 // --- HTML escape ---
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// --- Has-text manifest ---
+let _hasTextSet=null;
+function loadHasText(){ if(!_hasTextSet){_hasTextSet=fetch('data/has_text.json',{cache:'no-cache'}).then(r=>r.json()).then(a=>new Set(a)).catch(()=>new Set());} return _hasTextSet; }

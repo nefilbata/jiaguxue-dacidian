@@ -154,6 +154,12 @@
 
 <section class="container" style="padding-bottom: 60px;">
 
+  <!-- Search box -->
+  <div style="margin-bottom:18px">
+    <input id="pySearch" type="text" placeholder="在全部詞條中搜索（詞條名或拼音，可不含聲調）…" oninput="pySearch()" autocomplete="off"
+      style="width:100%;font-family:inherit;font-size:15px;padding:11px 16px;border:1px solid var(--border);border-radius:4px;background:#fff;color:var(--text);box-sizing:border-box">
+  </div>
+
   <!-- A-Z navigation -->
   <div class="az-bar" id="azBar"></div>
 
@@ -205,6 +211,36 @@
   let _byLetter = {};
   let _curLetter = 'A';
   let _curPage = 1;
+  let _ht = new Set();
+  loadHasText().then(s => _ht = s);
+
+  function rowFor(e){
+    const idStr = String(e.id).padStart(3, '0');
+    const jie = e.jie ? `／ ${esc(e.jie)}` : '';
+    const xiao = e.xiao && e.xiao !== e.title ? `<br><span style="color:var(--text-mute);font-size:13px;">${esc(e.xiao)}</span>` : '';
+    const dot = _ht.has(e.id)
+      ? '<span style="color:var(--primary);font-size:10px;margin-right:6px">\u25cf</span>'
+      : '<span style="color:var(--border);font-size:10px;margin-right:6px">\u25cb</span>';
+    return `<tr>
+        <td><div class="e-title">${dot}<a class="han" href="entry.html?id=${e.id}">${esc(e.title)}</a><span class="py">［${esc(e.pinyin || '')}］</span></div></td>
+        <td class="e-desc">${esc(e.zhang || '')}${jie}${xiao}</td>
+        <td class="e-bian"><b>${esc(e.bian || '')}</b><span class="num">／ ${idStr}</span></td>
+      </tr>`;
+  }
+  function pySearch(){
+    const kw = (document.getElementById('pySearch').value || '').trim();
+    if (!kw){ selectLetter(_curLetter); return; }
+    const hits = searchEntries(_entries, kw);
+    document.querySelectorAll('#azBar a').forEach(a => a.classList.remove('cur'));
+    document.getElementById('curLetter').textContent = '搜索';
+    document.getElementById('letterCount').textContent = hits.length.toLocaleString();
+    const tbody = document.getElementById('entriesBody');
+    tbody.innerHTML = hits.length
+      ? hits.slice(0, 100).map(rowFor).join('')
+      : `<tr><td colspan="3" style="text-align:center;padding:50px 20px;color:var(--text-mute);">未找到「${esc(kw)}」</td></tr>`;
+    document.getElementById('entriesPager').innerHTML = '';
+    document.getElementById('pagerMeta').textContent = hits.length > 100 ? '（顯示前 100 條）' : '';
+  }
 
   // Initialize from hash if any
   function getInitLetter(){
@@ -272,16 +308,7 @@
     if (page.length === 0){
       tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 50px 20px; color: var(--text-mute);">此字母下暫無辭條</td></tr>`;
     } else {
-      tbody.innerHTML = page.map(e => {
-        const idStr = String(e.id).padStart(3, '0');
-        const jie = e.jie ? `／ ${esc(e.jie)}` : '';
-        const xiao = e.xiao && e.xiao !== e.title ? `<br><span style="color:var(--text-mute);font-size:13px;">${esc(e.xiao)}</span>` : '';
-        return `<tr>
-          <td><div class="e-title"><a class="han" href="entry.html?id=${e.id}">${esc(e.title)}</a><span class="py">［${esc(e.pinyin || '')}］</span></div></td>
-          <td class="e-desc">${esc(e.zhang || '')}${jie}${xiao}</td>
-          <td class="e-bian"><b>${esc(e.bian || '')}</b><span class="num">／ ${idStr}</span></td>
-        </tr>`;
-      }).join('');
+      tbody.innerHTML = page.map(rowFor).join('');
     }
     const pager = document.getElementById('entriesPager');
     renderPager(pager, list.length, PAGE_SIZE, _curPage, p => {

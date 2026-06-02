@@ -97,6 +97,18 @@
   }
   .backbar a:hover{ border-color: var(--primary); color: var(--primary); }
 
+  /* 上一条/下一条 */
+  .entry-nav{ display:flex; justify-content:space-between; gap:14px; margin-top:34px; }
+  .entry-nav .pn{ flex:1; max-width:48%; display:flex; flex-direction:column; gap:5px;
+    padding:14px 18px; border:1px solid var(--border-lt); border-radius:4px;
+    background:var(--bg-card); color:var(--text-mid); }
+  .entry-nav .pn:hover{ border-color:var(--primary); }
+  .entry-nav .pn.next{ text-align:right; align-items:flex-end; }
+  .entry-nav .pn .lbl{ font-size:12px; color:var(--text-mute); }
+  .entry-nav .pn .tt{ font-size:15px; font-weight:700; color:var(--text); }
+  .entry-nav .pn:hover .tt{ color:var(--primary); }
+  .entry-nav .pn.empty{ visibility:hidden; }
+
   @media (max-width: 640px){
     .entry-head h1{ font-size: 30px; }
     .entry-head .seal{ width: 42px; height: 42px; font-size: 18px; }
@@ -107,25 +119,38 @@
 <body>
 
 <nav class="nav">
-  <div class="nav-inner">
-    <a href="index.html" class="brand">甲骨學大辭典</a>
-    <div class="nav-links">
-      <a href="index.html">首頁</a>
-      <a href="pinyin.html">按音序</a>
-      <a href="bian.html">按編類</a>
-      <a href="appendix.html">附錄</a>
-      <a href="about.html">關於本辭典</a>
+  <div class="nav-left">
+    <div class="logo" aria-hidden="true">甲</div>
+    <div class="brand">
+      <span class="tc">甲骨學大辭典</span>
+      <span class="en">JIAGUXUE DACIDIAN</span>
     </div>
-    <button class="nav-toggle" onclick="toggleMobileMenu()" aria-label="選單">☰</button>
   </div>
-  <div class="mobile-menu" id="mmenu">
+  <div class="nav-menu">
     <a href="index.html">首頁</a>
     <a href="pinyin.html">按音序</a>
     <a href="bian.html">按編類</a>
     <a href="appendix.html">附錄</a>
     <a href="about.html">關於本辭典</a>
   </div>
+  <div class="nav-right">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <span class="divider"></span>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.83A4.5 4.5 0 0 1 19 11c0 5.65-7 10-7 10z"/></svg>
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.6M8.2 13.2l7.6 4.6"/></svg>
+  </div>
+  <button class="nav-toggle" aria-label="menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
 </nav>
+
+<div class="m-menu" id="mmenu">
+  <a href="index.html">首頁</a>
+  <a href="pinyin.html">按音序</a>
+  <a href="bian.html">按編類</a>
+  <a href="appendix.html">附錄</a>
+  <a href="about.html">關於本辭典</a>
+</div>
 
 <div class="entry-wrap">
   <div class="crumb" id="crumb">
@@ -162,18 +187,10 @@
     document.getElementById('crumb').innerHTML =
       `<a href="index.html">首頁</a> <span class="sep">›</span>
        <a href="bian.html">按編類</a> <span class="sep">›</span>
-       <span>${esc(e.bian || '')}</span> <span class="sep">›</span>
+       <a href="bian.html">${esc(e.bian || '')}</a> <span class="sep">›</span>
        <span style="color:var(--primary)">${esc(e.title)}</span>`;
   }
 
-  let _hasText = null;
-  async function loadHasText(){
-    if (!_hasText){
-      try{ _hasText = new Set(await (await fetch('data/has_text.json',{cache:'no-cache'})).json()); }
-      catch(_){ _hasText = new Set(); }
-    }
-    return _hasText;
-  }
   async function loadContent(id){
     // 先查清单：无正文则直接交给截图/缺省兜底，不发无谓请求
     const set = await loadHasText();
@@ -200,6 +217,12 @@
     document.title = `${e.title} · 甲骨學大辭典`;
     renderCrumb(e);
 
+    const prev = (entries || []).find(x => x.id === id - 1);
+    const next = (entries || []).find(x => x.id === id + 1);
+    const pn = `<nav class="entry-nav">
+      ${prev ? `<a class="pn prev" href="entry.html?id=${prev.id}"><span class="lbl">‹ 上一條</span><span class="tt">${esc(prev.title)}</span></a>` : '<span class="pn empty"></span>'}
+      ${next ? `<a class="pn next" href="entry.html?id=${next.id}"><span class="lbl">下一條 ›</span><span class="tt">${esc(next.title)}</span></a>` : '<span class="pn empty"></span>'}
+    </nav>`;
     const back = `<div class="backbar"><a href="bian.html">‹ 返回目錄</a></div>`;
     const content = await loadContent(id);
 
@@ -214,7 +237,7 @@
     } else {
       body = `<div class="state">此條內容整理中。</div>`;             // 缺省
     }
-    main.innerHTML = renderHead(e) + body + back;
+    main.innerHTML = renderHead(e) + body + pn + back;
   })();
 </script>
 </body>

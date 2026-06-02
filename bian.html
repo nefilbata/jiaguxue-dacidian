@@ -307,11 +307,11 @@
 
     <div>
       <div class="feat-head">
-        <h3 class="section-h" style="margin-bottom:0">本章條目精選</h3>
+        <h3 class="section-h" style="margin-bottom:0">本章全部條目</h3>
         <span style="color: var(--text-mute); font-size: 13px;" id="featChapName">—</span>
       </div>
       <div class="feat-grid" id="featGrid"></div>
-      <a class="view-all" id="viewAllLink" href="#">查看本章全部條目 ∨</a>
+      <a class="view-all" id="viewAllLink" href="javascript:void(0)"></a>
     </div>
   </div>
 
@@ -380,6 +380,9 @@
     renderMain();
   });
 
+  loadHasText().then(s => { _htB = s; renderMain(); });
+
+  let _htB = new Set();
   function renderSidebar(){
     const list = document.getElementById('sideList');
     list.innerHTML = _bianOrder.map((b, i) => {
@@ -448,17 +451,21 @@
 
     // featured (first 3 of cur zhang)
     document.getElementById('featChapName').textContent = `當前章節：${_curZhang}`;
-    const items = (data.zhangs[_curZhang] || []).slice(0, 3);
-    document.getElementById('featGrid').innerHTML = items.map(e => `
+    const items = (data.zhangs[_curZhang] || []);
+    document.getElementById('featGrid').innerHTML = items.map(e => {
+      const dot = _htB.has(e.id)
+        ? '<span style="color:var(--primary);font-size:10px;margin-right:6px">\u25cf</span>'
+        : '<span style="color:var(--border);font-size:10px;margin-right:6px">\u25cb</span>';
+      return `
       <div class="feat-card">
-        <div class="ft"><a href="entry.html?id=${e.id}" style="color:inherit">${esc(e.title)}</a></div>
+        <div class="ft">${dot}<a href="entry.html?id=${e.id}" style="color:inherit">${esc(e.title)}</a></div>
         <div class="fpy">${esc(e.pinyin || '')}</div>
         <div class="fd">${esc(e.jie || '')}${e.xiao && e.xiao !== e.title ? ' ／ ' + esc(e.xiao) : ''}</div>
         <a class="flink" href="entry.html?id=${e.id}">查看詳情 ›</a>
-      </div>
-    `).join('');
-    const total = (data.zhangs[_curZhang] || []).length;
-    document.getElementById('viewAllLink').textContent = `查看本章全部 ${total} 條 ∨`;
+      </div>`;
+    }).join('');
+    const total = items.length;
+    document.getElementById('viewAllLink').textContent = `本章共 ${total} 條　（\u25cf 已錄正文 / \u25cb 整理中）`;
   }
 </script>
 </body>
