@@ -408,7 +408,7 @@
       _openZhang = wantZ;
       _initScrollZ = wantZ;   // scroll to it after first render
     } else {
-      _openZhang = zhangNames[0];
+      _openZhang = null;   // 默認全部收起，由用戶自行點開
     }
     renderSidebar();
     renderMain();
@@ -447,7 +447,7 @@
       return;
     }
     _curBian = b;
-    _openZhang = Object.keys(_byBian[b].zhangs)[0]; // expand first chapter, no scroll
+    _openZhang = null; // 切換編後保持全部收起
     renderSidebar();
     renderMain();
   }
